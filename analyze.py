@@ -115,20 +115,23 @@ def main():
     agree = [maj[k] == bool(key['auto'][str(k[0])][k[1]][k[2]]) for k in maj]
     print(f'  Agreement of the majority vote with the automatic OWLv2 check: {100 * sum(agree) / len(agree):.1f}% of {len(agree)} images')
 
-    Q = [t for p in R for t in p.get('qual', [])]
-    if Q:
-        print('\nQuestion 2: which picture looks better?')
-        pref = collections.Counter()
-        for t in Q:
-            right = 'y' if t['left'] == 'x' else 'x'
-            pref[t['left'] if t['q'] == 'A' else right if t['q'] == 'B' else 'same'] += 1
-        per = [(sum(1 for t in p.get('qual', []) if (t['q'] == 'A' and t['left'] == 'y') or (t['q'] == 'B' and t['left'] == 'x')),
-                len(p.get('qual', []))) for p in R if p.get('qual')]
-        lo, hi = boot(per)
-        n = len(Q)
-        print(f'  prefer {key["models"]["y"]}: {100 * pref["y"] / n:.1f}% [95% CI {100 * lo:.1f}, {100 * hi:.1f}]   '
-              f'prefer {key["models"]["x"]}: {100 * pref["x"] / n:.1f}%   about the same: {100 * pref["same"] / n:.1f}%   ({n} answers)')
+    def better(t):
+        right = 'y' if t['left'] == 'x' else 'x'
+        return 'same' if t['q'] == 'same' else (t['left'] if t['q'] == 'A' else right)
 
+    if any(p['qual'] for p in R):
+        print('\nQuestion 2: which picture looks better?')
+        for label, keep in [('original relation', 'o'), ('flipped relation', 'f'), ('all rounds', None)]:
+            per = [[better(t) for t in p['qual'] if keep in (None, t['v'])] for p in R]
+            per = [b for b in per if b]
+            if not per:
+                continue
+            flat = [b for bs in per for b in bs]; n = len(flat); c = collections.Counter(flat)
+            lo, hi = boot([(bs.count('y'), len(bs)) for bs in per])
+            lo2, hi2 = boot([(len(bs) - bs.count('x'), len(bs)) for bs in per])
+            print(f'  {label:18s} prefer {key["models"]["y"]} {100 * c["y"] / n:4.1f}% [{100 * lo:.0f}, {100 * hi:.0f}]   '
+                  f'prefer {key["models"]["x"]} {100 * c["x"] / n:4.1f}%   about the same {100 * c["same"] / n:4.1f}%   '
+                  f'| {key["models"]["y"]} at least as good {100 * (n - c["x"]) / n:4.1f}% [{100 * lo2:.0f}, {100 * hi2:.0f}]   ({n} answers)')
 
 if __name__ == '__main__':
     main()
