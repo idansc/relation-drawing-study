@@ -1,172 +1,313 @@
-<title>Relation Drawing Study</title>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Which picture matches?</title>
+<meta name="description" content="A one-minute study: pick the picture that matches the caption.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖼️</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&display=swap">
 <style>
 [hidden]{display:none!important}
-body{margin:0}
 :root{
-  --bg:#f3f4f1; --surface:#ffffff; --ink:#15181c; --ink2:#5b616b; --line:#d6dad3;
-  --accent:#0d6b66; --accent-ink:#ffffff; --accent-soft:#dcecea; --warn:#9a4a12;
-  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --bg:#f6f4ef; --card:#ffffff; --ink:#1d2127; --ink2:#5d6570; --line:#e3e0d8;
+  --accent:#5b4cf0; --accent2:#eeecff; --rel:#ffd54a; --rel-ink:#3a2c00; --ok:#1f9d6a; --bad:#d9463b;
+  --shadow:0 10px 30px -12px rgba(30,20,90,.35);
+  --font:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
 }
-@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
-  --bg:#111315; --surface:#1a1d20; --ink:#e7e9e5; --ink2:#a2a8b0; --line:#30353a;
-  --accent:#4cb1a9; --accent-ink:#0b1413; --accent-soft:#1d3634; --warn:#e3a06d; color-scheme:dark; } }
-:root[data-theme="dark"]{
-  --bg:#111315; --surface:#1a1d20; --ink:#e7e9e5; --ink2:#a2a8b0; --line:#30353a;
-  --accent:#4cb1a9; --accent-ink:#0b1413; --accent-soft:#1d3634; --warn:#e3a06d; color-scheme:dark; }
-body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5}
-.wrap{max-width:920px;margin:0 auto;padding-inline:16px;padding-block:20px 48px;display:flex;flex-direction:column;gap:18px}
-header{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 16px}
-h1{font-size:19px;font-weight:600;margin:0;text-wrap:balance}
-.meta{font-family:var(--mono);font-size:12.5px;color:var(--ink2);font-variant-numeric:tabular-nums}
-.bar{height:4px;background:var(--line);border-radius:2px;overflow:hidden}.bar>i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s}
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:14px}
-.panel p{margin:0;max-width:66ch}.panel ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px;max-width:66ch}
-label.f{display:flex;flex-direction:column;gap:6px;font-weight:500;max-width:340px}
-textarea{font:13px/1.4 var(--mono);width:100%;box-sizing:border-box;padding:9px 11px;border:1px solid var(--line);border-radius:7px;background:var(--bg);color:var(--ink);resize:vertical;word-break:break-all}
-input[type=text]{font:inherit;padding:9px 11px;border:1px solid var(--line);border-radius:7px;background:var(--bg);color:var(--ink)}
-input[type=text]:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.prompt{font-size:22px;font-weight:500;text-wrap:balance}.prompt small{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2);font-weight:500;margin-bottom:2px}
-.pair{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.card{display:flex;flex-direction:column;gap:6px}
-.card b{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--ink2)}
-.img{width:100%;aspect-ratio:1;border-radius:6px;background-color:#000;background-repeat:no-repeat;background-size:1000% 1000%;border:1px solid var(--line)}
-.q{display:flex;flex-direction:column;gap:8px}.q h3{margin:0;font-size:14.5px;font-weight:600}.q h3 span{font-weight:400;color:var(--ink2)}
-.seg{display:flex;flex-wrap:wrap;gap:8px}
-.seg button{font:inherit;font-weight:500;min-width:84px;padding:8px 14px;border-radius:7px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
-.seg button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-.seg button:hover{border-color:var(--accent)}
-.nav{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
-.btn{font:inherit;font-weight:600;padding:10px 20px;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);cursor:pointer}
-.btn.ghost{background:transparent;color:var(--accent)}.btn:disabled{opacity:.4;cursor:not-allowed}
-.status{font-size:13px;color:var(--ink2)}.status.err{color:var(--warn)}
-.kbd{font-family:var(--mono);font-size:12px;color:var(--ink2)}
-@media (max-width:520px){.pair{gap:8px}.seg button{min-width:0;flex:1}.prompt{font-size:19px}}
-@media (prefers-reduced-motion:reduce){.bar>i{transition:none}}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#15161c; --card:#1f2129; --ink:#eef0f4; --ink2:#a6adb9; --line:#2f323c;
+         --accent:#8f84ff; --accent2:#2a2750; --rel:#ffd54a; --rel-ink:#2a2000; --shadow:0 10px 30px -12px rgba(0,0,0,.7); }
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);-webkit-tap-highlight-color:transparent}
+.app{max-width:860px;margin:0 auto;padding:14px 16px 40px;display:flex;flex-direction:column;gap:14px;min-height:100vh}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{font-weight:900;font-size:17px;letter-spacing:.2px}
+.brand span{color:var(--accent)}
+.dots{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.dot{width:11px;height:11px;border-radius:50%;background:var(--line);transition:transform .25s,background .25s}
+.dot.on{background:var(--accent)}
+.dot.cur{outline:2px solid var(--accent);outline-offset:2px;animation:pulse 1.4s infinite}
+@keyframes pulse{50%{transform:scale(1.25)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:var(--shadow)}
+h1{font-size:clamp(26px,5vw,36px);line-height:1.12;margin:0 0 8px;font-weight:900;letter-spacing:-.3px}
+.lead{font-size:17px;color:var(--ink2);margin:0 0 16px;line-height:1.45}
+.qlabel{font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);text-align:center}
+.caption{font-size:clamp(26px,5.6vw,42px);font-weight:800;line-height:1.2;text-align:center;margin:6px 0 16px;letter-spacing:-.3px;text-wrap:balance}
+.caption b{font-weight:900}
+.rel{display:inline-block;background:var(--rel);color:var(--rel-ink);padding:0 .32em;border-radius:.3em;transform:rotate(-1.5deg);white-space:nowrap;box-shadow:0 3px 0 rgba(0,0,0,.12)}
+.pics{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pic{position:relative;border:0;padding:0;border-radius:18px;background:#000;cursor:pointer;overflow:hidden;aspect-ratio:1;
+     outline:4px solid transparent;outline-offset:3px;transition:transform .15s,outline-color .15s,box-shadow .15s}
+.pic img{width:100%;height:100%;object-fit:cover;display:block;image-rendering:auto}
+.pic .tag{position:absolute;left:10px;top:10px;background:rgba(255,255,255,.92);color:#111;font-weight:900;font-size:17px;
+          width:34px;height:34px;border-radius:50%;display:grid;place-items:center;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.pic .check{position:absolute;inset:0;display:grid;place-items:center;font-size:84px;color:#fff;opacity:0;background:rgba(91,76,240,.28);transition:opacity .15s}
+@media (hover:hover){.pic:hover{transform:translateY(-3px);outline-color:var(--accent2);box-shadow:var(--shadow)}}
+.pic:focus-visible{outline-color:var(--accent)}
+.pic.sel{outline-color:var(--accent)}
+.pic.sel .check{opacity:1}
+.alts{display:flex;gap:12px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+.alt{font:inherit;font-weight:800;font-size:17px;padding:12px 26px;border-radius:999px;border:2px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;min-width:140px;transition:transform .1s,border-color .15s,background .15s}
+.alt:hover{border-color:var(--accent)}
+.alt.sel{background:var(--accent);border-color:var(--accent);color:#fff}
+.alt:active,.pic:active{transform:scale(.97)}
+.foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:10px;flex-wrap:wrap}
+.link{font:inherit;font-weight:800;color:var(--ink2);background:none;border:0;cursor:pointer;padding:6px 2px}
+.link:disabled{opacity:.3;cursor:default}
+.keys{font-size:13px;color:var(--ink2)}
+@media (hover:none){.keys{display:none}}
+.btn{font:inherit;font-weight:900;font-size:18px;padding:14px 30px;border-radius:999px;border:0;background:var(--accent);color:#fff;cursor:pointer;box-shadow:0 6px 0 rgba(40,30,140,.35);transition:transform .1s,box-shadow .1s,opacity .2s}
+.btn:active{transform:translateY(3px);box-shadow:0 3px 0 rgba(40,30,140,.35)}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--accent);box-shadow:none;border:2px solid var(--accent);font-size:16px;padding:10px 20px}
+.practice{border:2px dashed var(--line);border-radius:18px;padding:14px;margin:4px 0 16px}
+.practice .caption{font-size:clamp(22px,4.6vw,30px);margin:4px 0 12px}
+.emo{font-size:clamp(40px,11vw,72px);background:var(--accent2);display:flex;align-items:center;justify-content:center;gap:.25em;aspect-ratio:auto;padding:18px 0;border-radius:16px}
+.emo span{display:inline-block}
+.shake{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.msg{text-align:center;font-weight:800;min-height:1.4em;margin:10px 0 0;color:var(--ink2)}
+.msg.good{color:var(--ok)} .msg.badm{color:var(--bad)}
+.rules{margin:0 0 16px;padding-left:20px;color:var(--ink2);line-height:1.6;font-size:16px}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+input[type=text]{font:inherit;font-size:16px;padding:11px 14px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink);min-width:0;flex:1;max-width:280px}
+input[type=text]:focus{outline:none;border-color:var(--accent)}
+.toast{position:fixed;left:50%;top:18px;transform:translate(-50%,-80px);background:var(--ink);color:var(--bg);font-weight:800;padding:10px 18px;border-radius:999px;transition:transform .35s;z-index:5;white-space:nowrap}
+.toast.show{transform:translate(-50%,0)}
+.center{text-align:center}
+.big{font-size:64px;line-height:1}
+.status{color:var(--ink2);font-weight:700}
+details{margin-top:14px;color:var(--ink2)}
+textarea{width:100%;font:12px/1.4 ui-monospace,Menlo,monospace;margin-top:8px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:8px}
+.fade{animation:fade .28s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
+.small{font-size:13px;color:var(--ink2);margin-top:14px;line-height:1.5}
+@media (max-width:520px){.card{padding:16px;border-radius:18px}.pics{gap:9px}.alt{min-width:0;flex:1;padding:12px 10px}.pic .tag{width:28px;height:28px;font-size:14px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.step{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;font-weight:900;margin-right:8px;vertical-align:2px;letter-spacing:0}
+.q2{margin-top:18px;padding:14px;border-radius:16px;border:2px solid var(--line);transition:border-color .2s,background .2s,opacity .2s;opacity:.55}
+.q2.on{opacity:1;border-color:var(--accent);background:var(--accent2)}
+.q2 .qt{font-weight:900;font-size:clamp(18px,3.6vw,22px);text-align:center}
+.q2 .qt small{display:block;font-weight:700;font-size:13px;color:var(--ink2);margin-top:2px}
+.seg{display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:10px;margin-top:10px}
+.seg .alt{min-width:0;padding:11px 8px}
 </style>
-
-<div class="wrap">
-  <header>
-    <h1>Relation drawing study</h1>
-    <span class="meta" id="count">about 27 image pairs</span>
+</head>
+<body>
+<main class="app">
+  <header class="top">
+    <div class="brand">Which picture <span>matches?</span></div>
+    <div class="dots" id="dots" aria-hidden="true"></div>
   </header>
-  <div class="bar" aria-hidden="true"><i id="prog"></i></div>
 
-  <section class="panel" id="intro">
-    <p>Each screen shows a short description and two generated images, <b>A</b> and <b>B</b>, made from the same starting noise by two different models. Which model made which image is hidden and changes from pair to pair.</p>
-    <ul>
-
-      <li><b>Relation holds</b>: the first object is placed as described relative to the second (left of, right of, above, below). Judge only the placement.</li>
-      <li><b>Looks better</b>: overall image quality: sharper, more realistic, fewer distortions. Ignore the description.</li>
-      <li>The model is still in training, so objects can look rough: a duck may be just a yellow blob. Judge roughly.</li>
-      <li>You may skip a question you cannot judge and still press Next.</li>
+  <section class="card fade" id="intro">
+    <h1>Which picture matches the caption?</h1>
+    <p class="lead"><b id="nRounds">20</b> quick rounds, about three minutes. For each caption, <b>1</b>&nbsp;tap the picture where the objects are placed as the caption says, and <b>2</b>&nbsp;pick the picture that looks better.</p>
+    <div class="practice">
+      <div class="qlabel">Warm-up</div>
+      <div class="caption">a <b>cat</b> <span class="rel">to the left of</span> a <b>dog</b></div>
+      <div class="pics" id="prac"></div>
+      <p class="msg" id="pracMsg">Tap the matching picture.</p>
+    </div>
+    <ul class="rules">
+      <li>For question 1, only <b>where</b> things are matters, not how nice the picture looks.</li>
+      <li>If both pictures match, tap <b>Both</b>. If none does, tap <b>Neither</b>.</li>
     </ul>
-    <p>You will see about 27 pairs, which takes around 7 minutes. No sign-in is needed. Your answers are sent automatically when you finish. Progress is kept in this browser, so you can pause and come back on the same device.</p>
-    <label class="f" for="rname">Your name or initials
-      <input type="text" id="rname" autocomplete="name" placeholder="e.g. A.W." maxlength="60">
-    </label>
-    <div class="nav"><span class="status" id="introStatus">Connecting…</span><button class="btn" id="startBtn" disabled>Start</button></div>
+    <div class="row">
+      <input type="text" id="name" maxlength="40" placeholder="Name or initials (optional)" autocomplete="nickname" aria-label="Name or initials (optional)">
+      <button class="btn" id="start" disabled>Start</button>
+    </div>
+    <p class="small">The pictures were drawn by two AI image models from the same random seed. Which model drew which picture is hidden and changes every round.</p>
   </section>
 
-  <section class="panel" id="rate" hidden>
-    <div class="prompt"><small>Description</small><span id="promptText">a stool below a piano</span></div>
-    <div class="pair">
-      <div class="card"><b>A</b><div class="img" id="imgA" role="img" aria-label="Image A"></div></div>
-      <div class="card"><b>B</b><div class="img" id="imgB" role="img" aria-label="Image B"></div></div>
+  <section class="card" id="trial" hidden>
+    <div class="qlabel"><span class="step">1</span>Which picture shows</div>
+    <div class="caption" id="cap"></div>
+    <div class="pics">
+      <button class="pic" id="pA" aria-label="Picture A"><img id="iA" alt=""><span class="tag">A</span><span class="check">✓</span></button>
+      <button class="pic" id="pB" aria-label="Picture B"><img id="iB" alt=""><span class="tag">B</span><span class="check">✓</span></button>
     </div>
-    <div class="q" data-q="relation"><h3>1. In which image does the relation hold? <span>(is the first object placed as described?)</span></h3>
-      <div class="seg"><button data-v="A">A</button><button data-v="B">B</button><button data-v="both">Both</button><button data-v="neither">Neither</button></div></div>
-    <div class="q" data-q="quality"><h3>2. Which image looks better? <span>(sharper, more realistic, fewer distortions; ignore the description)</span></h3>
-      <div class="seg"><button data-v="A">A</button><button data-v="B">B</button><button data-v="cant_tell">Can't tell</button></div></div>
-    <div class="nav">
-      <button class="btn ghost" id="backBtn">Back</button>
-      <span class="status" id="saveStatus" aria-live="polite"></span>
-      <button class="btn" id="nextBtn" disabled>Next</button>
+    <div class="alts">
+      <button class="alt" id="bBoth">Both</button>
+      <button class="alt" id="bNone">Neither</button>
     </div>
-    <span class="kbd">Enter = next. You may skip a question you cannot judge.</span>
+    <div class="q2" id="q2">
+      <div class="qt"><span class="step">2</span>Which looks better?<small>sharper, more realistic, fewer glitches</small></div>
+      <div class="seg">
+        <button class="alt" id="qA">A</button>
+        <button class="alt" id="qS">About the same</button>
+        <button class="alt" id="qB">B</button>
+      </div>
+    </div>
+    <div class="foot">
+      <button class="link" id="back">← Back</button>
+      <span class="keys" id="keys">Keys: ← A · → B · ↑ Both · ↓ Neither</span>
+    </div>
   </section>
 
-  <section class="panel" id="done" hidden>
-    <p><b>This set is done. Thank you.</b></p>
-    <p class="status" id="sendStatus" aria-live="polite"></p>
-    <p>Backup: if the line above says sending failed, copy this code and send it to the person who shared the link.</p>
-    <textarea id="code" readonly rows="4" aria-label="Your answer code"></textarea>
-    <div class="nav"><button class="btn" id="copyBtn">Copy answer code</button><span class="status" id="copyStatus" aria-live="polite"></span></div>
-    <p>If you have another 10 minutes, you can rate a second set of different pairs; the code then covers both sets.</p>
-    <div class="nav"><button class="btn ghost" id="reviewBtn">Review last pair</button><button class="btn ghost" id="moreBtn">Rate another set</button></div>
+  <section class="card center" id="done" hidden>
+    <div class="big">🎉</div>
+    <h1>Thank you!</h1>
+    <p class="lead" id="stats"></p>
+    <p class="status" id="sendMsg" aria-live="polite"></p>
+    <div class="row" style="justify-content:center">
+      <button class="btn ghost" id="share">Copy link for a friend</button>
+    </div>
+    <details><summary>Backup code (only if sending failed)</summary><textarea id="code" rows="4" readonly></textarea></details>
   </section>
-</div>
+</main>
+<div class="toast" id="toast"></div>
+<canvas id="fx"></canvas>
 
 <script>
 (() => {
+  const INBOX = 'https://ntfy.sh/ssf-heval-tj83te0syl33o0we7f';
+  const KEY = 'rds-imagenet-v4';
+  const DRY = new URLSearchParams(location.search).has('dry');   // ?dry=1 previews the study without sending answers
   const $ = id => document.getElementById(id);
-  const KEY = 'rds-public-v4';
-  let M = null, order = [], blocks = [], seed = 0, pos = 0, answers = {}, name = '', shownAt = 0, cur = {}, sent = 0;
-  const INBOX = 'https://ntfy.sh/rds-4O7PCSJqDpwkEZh0y7xNqK6d';
-  function hash(s){ let h = 2166136261 >>> 0; for (const c of s) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619) >>> 0; } return h; }
-  function shuffled(ids, sd){ const a = ids.slice(); let x = sd || 1;
-    for (let i = a.length - 1; i > 0; i--) { x ^= x << 13; x >>>= 0; x ^= x >>> 17; x ^= x << 5; x >>>= 0; const j = x % (i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; }
-  function load(){ try { return JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { return null; } }
-  function persist(){ try { localStorage.setItem(KEY, JSON.stringify({name, blocks, seed, answers, sent})); } catch (e) {} }
-  function cellStyle(el, cell){ const s = Math.floor(cell / M.per_sheet), k = cell % M.per_sheet, c = k % M.grid, r = Math.floor(k / M.grid);
-    el.style.backgroundImage = `url(${M.sheets[s]})`; el.style.backgroundPosition = `${c / (M.grid - 1) * 100}% ${r / (M.grid - 1) * 100}%`; }
-  function buildOrder(){ order = []; for (const b of blocks) order = order.concat(shuffled(M.blocks[b], hash(seed + ':' + b))); }
-  function progress(){ const n = order.filter(id => answers[id]).length; $('count').textContent = `${n} of ${order.length} rated`; $('prog').style.width = (order.length ? 100 * n / order.length : 0) + '%'; }
-  function setPressed(q, v){ document.querySelectorAll(`.q[data-q="${q}"] button`).forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === v))); }
-  function ready(){ return true; }   // skipping allowed (Idan, 25 Sep): a skipped question is stored as missing
-  const ENC = new Proxy({A: 'a', B: 'b', both: '2', neither: '0', cant_tell: 'x'}, {get: (t, k) => t[k] || '-'});
-  function code(){ const a = order.filter(id => answers[id]).map(id => { const r = answers[id];
-      return id + ENC[r.subject] + ENC[r.object] + ENC[r.relation] + ENC[r.quality] + Math.min(999, Math.round(r.ms / 1000)).toString(36); });
-    const clean = name.replace(/[^A-Za-z0-9 .\-_]/g, '').slice(0, 40);
-    return `RDS2|${clean}|${seed.toString(36)}|${blocks.join('.')}|${a.join(',')}`; }
-  function show(i){ pos = Math.max(0, Math.min(i, order.length - 1)); const p = M.byId[order[pos]];
-    $('promptText').textContent = p.prompt; 
-    cellStyle($('imgA'), p.cells[0]); cellStyle($('imgB'), p.cells[1]);
-    const a = answers[p.id] || {}; cur = {relation: a.relation, quality: a.quality};
-    ['relation', 'quality'].forEach(q => setPressed(q, cur[q]));
-    $('nextBtn').disabled = !ready(); $('backBtn').disabled = pos === 0; $('rate').hidden = false; $('done').hidden = true; shownAt = performance.now();
-    $('nextBtn').textContent = pos === order.length - 1 ? 'Finish' : 'Next'; $('saveStatus').textContent = ''; }
-  function nAnswered(){ return order.filter(id => answers[id]).length; }
-  function sendNow(final){ const n = nAnswered(); if (!n || n <= sent) return Promise.resolve(n <= sent);
-    const body = code();
-    return fetch(INBOX, {method: 'POST', body, headers: {'Title': final ? 'final' : 'partial'}}).then(r => { if (r.ok) { sent = n; persist(); } return r.ok; }, () => false); }
-  function sendOnLeave(){ const n = nAnswered(); if (!n || n <= sent) return;
-    try { if (navigator.sendBeacon(INBOX, code())) { sent = n; persist(); } } catch (e) {} }
+  let T = null, P = [], A = {}, pos = 0, st = null, shownAt = 0, busy = false, sentN = 0;
+
+  // seeded RNG so a participant keeps the same assignment after a reload
+  const rng = s => () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296;
+  const shuffle = (a, r) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const half = (n, a, b, r) => shuffle(Array.from({length: n}, (_, i) => i < n / 2 ? a : b), r);
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify({st, A, pos, sentN})); } catch (e) {} };
+  const load = () => { try { return JSON.parse(localStorage.getItem(KEY)); } catch (e) { return null; } };
+  const toast = t => { const el = $('toast'); el.textContent = t; el.classList.add('show'); clearTimeout(toast.h); toast.h = setTimeout(() => el.classList.remove('show'), 1300); };
+  const fact = n => T.facts.find(x => x.n === n);
+  const full = i => A[i] && A[i].c && A[i].q;
+  const nDone = () => P.filter((_, i) => full(i)).length;
+
+  function plan(seed) {
+    // every prompt once, half with the original relation and half flipped; each model on the left in half of the rounds
+    const r = rng(seed), n = T.facts.length, vars = half(n, 'o', 'f', r), lefts = half(n, 'x', 'y', r);
+    return shuffle(T.facts.map((f, i) => ({n: f.n, id: f.id, v: vars[i], left: lefts[i]})), r);
+  }
+  function dots() {
+    const on = !$('trial').hidden;
+    $('dots').innerHTML = P.map((t, i) => `<i class="dot${full(i) ? ' on' : ''}${on && i === pos ? ' cur' : ''}"></i>`).join('');
+  }
+  const np = s => s.replace(/^(an?\s)(.*)$/, '$1<b>$2</b>');   // "a trench coat" -> a <b>trench coat</b>
+  const captionHTML = v => `${np(v.s)} <span class="rel">${v.phrase}</span> ${np(v.o)}`;
+  const B1 = {A: 'pA', B: 'pB', both: 'bBoth', neither: 'bNone'}, B2 = {A: 'qA', B: 'qB', same: 'qS'};
+
+  function paint() {
+    const a = A[pos] || {};
+    Object.values(B1).forEach(id => $(id).classList.remove('sel')); Object.values(B2).forEach(id => $(id).classList.remove('sel'));
+    if (a.c) $(B1[a.c]).classList.add('sel'); if (a.q) $(B2[a.q]).classList.add('sel');
+    $('q2').classList.toggle('on', !!a.c);
+    $('keys').textContent = a.c ? 'Keys: ← A better · → B better · ↓ About the same' : 'Keys: ← A · → B · ↑ Both · ↓ Neither';
+  }
+  function show(i) {
+    pos = i; const t = P[i], v = fact(t.n).v[t.v], right = t.left === 'x' ? 'y' : 'x';
+    $('cap').innerHTML = captionHTML(v);
+    $('iA').src = v.img[t.left]; $('iB').src = v.img[right];
+    paint(); $('back').disabled = i === 0;
+    $('trial').classList.remove('fade'); void $('trial').offsetWidth; $('trial').classList.add('fade');
+    shownAt = performance.now(); busy = false; dots(); save();
+  }
+  function payload(final) {
+    const rows = P.map((t, i) => A[i] && (A[i].c || A[i].q) ? {n: t.n, id: t.id, v: t.v, left: t.left, c: A[i].c || null, q: A[i].q || null, ms: A[i].ms, msq: A[i].msq} : null).filter(Boolean);
+    return JSON.stringify({v: 4, pid: st.pid, name: st.name, seed: st.seed, t0: st.t0, dur: Math.round(Date.now() - st.t0ms),
+      ua: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? 'm' : 'd', practice: st.practice, final, trials: rows});
+  }
+  function send(final) {
+    const n = nDone(); if (DRY || !n || (!final && n <= sentN)) return Promise.resolve(true);
+    return fetch(INBOX, {method: 'POST', body: payload(final), headers: {Title: final ? 'final' : 'partial'}})
+      .then(r => { if (r.ok) { sentN = n; save(); } return r.ok; }, () => false);
+  }
+  function sendOnLeave() { const n = nDone(); if (DRY || !n || n <= sentN || !st) return; try { if (navigator.sendBeacon(INBOX, payload(false))) { sentN = n; save(); } } catch (e) {} }
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') sendOnLeave(); });
   window.addEventListener('pagehide', sendOnLeave);
-  function finished(){ $('rate').hidden = true; $('done').hidden = false; $('code').value = code();
-    $('sendStatus').textContent = 'Sending your answers…'; $('sendStatus').className = 'status';
-    sendNow(true).then(ok => { $('sendStatus').textContent = ok ? 'Your answers were sent automatically. Nothing else to do.' : 'Automatic sending failed. Please copy the code below and send it to the person who shared this link.'; $('sendStatus').className = ok ? 'status' : 'status err'; }); $('moreBtn').hidden = blocks.length >= M.blocks.length; $('copyStatus').textContent = ''; }
-  function next(){ if (!ready()) return; const p = M.byId[order[pos]];
-    answers[p.id] = {...cur, ms: Math.round(performance.now() - shownAt)}; persist(); progress();
-    const nxt = order.findIndex((id, k) => k > pos && !answers[id]); const miss = order.findIndex(id => !answers[id]);
-    if (nxt >= 0) show(nxt); else if (miss < 0) finished(); else show(miss); }
-  document.querySelectorAll('.q').forEach(q => q.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return;
-    cur[q.dataset.q] = b.dataset.v; setPressed(q.dataset.q, b.dataset.v); $('nextBtn').disabled = !ready(); }));
-  $('nextBtn').addEventListener('click', next); $('backBtn').addEventListener('click', () => show(pos - 1));
-  $('reviewBtn').addEventListener('click', () => show(order.length - 1));
-  $('moreBtn').addEventListener('click', () => { const nb = M.blocks.length; const last = blocks[blocks.length - 1];
-    for (let i = 1; i <= nb; i++) { const c = (last + i) % nb; if (!blocks.includes(c)) { blocks.push(c); break; } }
-    persist(); buildOrder(); progress(); const f = order.findIndex(id => !answers[id]); if (f >= 0) show(f); else finished(); });
-  $('copyBtn').addEventListener('click', () => { const t = $('code').value;
-    const sel = () => { $('code').focus(); $('code').select(); $('copyStatus').textContent = 'Selected: press Ctrl+C (or Cmd+C) to copy.'; };
-    try { navigator.clipboard.writeText(t).then(() => { $('copyStatus').textContent = 'Copied. Paste it into an email or message.'; }, sel); } catch (e) { sel(); } });
-  document.addEventListener('keydown', e => { if (e.key === 'Enter' && !$('rate').hidden && ready() && document.activeElement?.id !== 'rname') { e.preventDefault(); next(); } });
-  async function init(){
-    try { M = await (await fetch('pairs.json')).json(); } catch (e) { $('introStatus').textContent = 'The image list failed to load. Reload the page.'; $('introStatus').className = 'status err'; return; }
-    M.byId = Object.fromEntries(M.pairs.map(p => [p.id, p])); M.sheets.forEach(s => { const i = new Image(); i.src = s; });
-    const st = load();
-    if (st && Array.isArray(st.blocks)) { ({name, blocks, seed, answers} = st); sent = st.sent || 0; blocks = blocks.filter(b => Number.isInteger(b) && b >= 0 && b < M.blocks.length); $('rname').value = name || ''; }
-    if (!blocks.length) { seed = seed || ((Math.random() * 2 ** 31) >>> 0); blocks = [seed % M.blocks.length]; answers = answers || {}; }
-    buildOrder(); progress();
-    const n = order.filter(id => answers[id]).length;
-    $('introStatus').textContent = n ? `Welcome back: ${n} of ${order.length} pairs already rated on this device.` : 'Enter your name to begin.';
-    const upd = () => { $('startBtn').disabled = !$('rname').value.trim(); }; $('rname').addEventListener('input', upd); upd();
-    $('startBtn').textContent = n ? 'Continue' : 'Start';
-    $('startBtn').addEventListener('click', () => { name = $('rname').value.trim().slice(0, 40); persist(); $('intro').hidden = true;
-      const f = order.findIndex(id => !answers[id]); if (f < 0) finished(); else show(f); });
+
+  function answer(kind, val) {
+    if (busy || $('trial').hidden) return;
+    const a = A[pos] = A[pos] || {}, now = Math.round(performance.now() - shownAt);
+    if (kind === 'c') { a.c = val; a.ms = now; } else { if (!a.c) { toast('First: which picture shows the caption? ☝️'); return; } a.q = val; a.msq = now; }
+    paint(); dots(); save();
+    if (!full(pos)) return;
+    busy = true;
+    const k = nDone(), n = P.length;
+    if (k === Math.floor(n / 2) && !st.half) { st.half = 1; toast('Halfway there! 🙌'); }
+    if (k === n - 1 && !st.last) { st.last = 1; toast('Last one! 🏁'); }
+    setTimeout(() => { const nxt = P.findIndex((_, i) => !full(i) && i > pos), miss = P.findIndex((_, i) => !full(i));
+      if (nxt >= 0) show(nxt); else if (miss >= 0) show(miss); else finish(); }, 380);
+  }
+  function finish() {
+    $('trial').hidden = true; $('done').hidden = false; dots();
+    const s = Math.round((Date.now() - st.t0ms) / 1000);
+    $('stats').textContent = `You judged ${P.length} pairs in ${s >= 60 ? Math.floor(s / 60) + ' min ' : ''}${s % 60} s. Your answers help us check how well AI models follow words like “left of” and “above”.`;
+    $('code').value = payload(true);
+    $('sendMsg').textContent = 'Sending your answers…';
+    send(true).then(ok => { $('sendMsg').textContent = DRY ? 'Preview mode (?dry=1): answers were not sent.' : ok ? 'Answers received. Nothing else to do. ✔' : 'Sending failed. Please copy the backup code below and send it to the person who shared this link.'; });
+    confetti();
+  }
+
+  // warm-up with emoji, in random order; the task starts only after a correct pick
+  function practice() {
+    const tiles = [['🐱', '🐶', 1], ['🐶', '🐱', 0]]; if (Math.random() < .5) tiles.reverse();
+    $('prac').innerHTML = tiles.map(([a, b, ok]) => `<button class="pic emo" data-ok="${ok}" aria-label="${a === '🐱' ? 'cat then dog' : 'dog then cat'}"><span>${a}</span><span>${b}</span></button>`).join('');
+    $('prac').querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+      st.practice = (st.practice || 0) + 1;
+      if (b.dataset.ok === '1') { b.classList.add('sel'); $('pracMsg').textContent = 'Nice, that’s it! 🎯 Ready when you are.'; $('pracMsg').className = 'msg good'; $('start').disabled = false; }
+      else { b.classList.remove('shake'); void b.offsetWidth; b.classList.add('shake'); $('pracMsg').textContent = 'Look again: the cat should be on the left.'; $('pracMsg').className = 'msg badm'; }
+      save(); }));
+  }
+
+  function confetti() {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const c = $('fx'), g = c.getContext('2d'); c.width = innerWidth; c.height = innerHeight;
+    const cols = ['#5b4cf0', '#ffd54a', '#1f9d6a', '#ff7a59', '#46b3ff'];
+    const Q = Array.from({length: 150}, () => ({x: innerWidth / 2, y: innerHeight / 3, vx: (Math.random() - .5) * 14, vy: -Math.random() * 13 - 4,
+      s: 5 + Math.random() * 6, r: Math.random() * 6, vr: (Math.random() - .5) * .3, c: cols[Math.floor(Math.random() * cols.length)]}));
+    let t = 0; (function frame() { g.clearRect(0, 0, c.width, c.height);
+      Q.forEach(p => { p.vy += .35; p.x += p.vx; p.y += p.vy; p.r += p.vr; g.save(); g.translate(p.x, p.y); g.rotate(p.r); g.fillStyle = p.c; g.fillRect(-p.s / 2, -p.s / 3, p.s, p.s * .66); g.restore(); });
+      if (++t < 170) requestAnimationFrame(frame); else g.clearRect(0, 0, c.width, c.height); })();
+  }
+
+  $('pA').addEventListener('click', () => answer('c', 'A')); $('pB').addEventListener('click', () => answer('c', 'B'));
+  $('bBoth').addEventListener('click', () => answer('c', 'both')); $('bNone').addEventListener('click', () => answer('c', 'neither'));
+  $('qA').addEventListener('click', () => answer('q', 'A')); $('qB').addEventListener('click', () => answer('q', 'B')); $('qS').addEventListener('click', () => answer('q', 'same'));
+  $('back').addEventListener('click', () => { if (pos > 0) show(pos - 1); });
+  $('share').addEventListener('click', () => { const u = location.origin + location.pathname;
+    (navigator.clipboard ? navigator.clipboard.writeText(u) : Promise.reject()).then(() => toast('Link copied 🔗'), () => toast(u)); });
+  document.addEventListener('keydown', e => {
+    if ($('trial').hidden || e.target.tagName === 'INPUT') return;
+    const first = !(A[pos] && A[pos].c);
+    const m = first ? {ArrowLeft: 'A', ArrowRight: 'B', ArrowUp: 'both', ArrowDown: 'neither'}[e.key] : {ArrowLeft: 'A', ArrowRight: 'B', ArrowDown: 'same', ArrowUp: 'same'}[e.key];
+    if (m) { e.preventDefault(); answer(first ? 'c' : 'q', m); } else if (e.key === 'Backspace' && pos > 0) { e.preventDefault(); show(pos - 1); }
+  });
+
+  async function init() {
+    try { T = await (await fetch('trials.json', {cache: 'no-cache'})).json(); }
+    catch (e) { $('pracMsg').textContent = 'The study failed to load. Please reload the page.'; return; }
+    $('nRounds').textContent = T.facts.length;
+    const saved = load();
+    if (saved && saved.st && saved.st.seed) { ({st, A, pos} = saved); sentN = saved.sentN || 0; }
+    else { const b = new Uint32Array(2); crypto.getRandomValues(b);
+      st = {seed: b[0] >>> 0, pid: b[1].toString(36), name: '', practice: 0, t0: new Date().toISOString(), t0ms: Date.now()}; }
+    P = plan(st.seed); dots();
+    P.forEach(t => Object.values(fact(t.n).v[t.v].img).forEach(src => { const im = new Image(); im.src = src; }));
+    // personal links: ?p=AW fills in the rater's initials, so they do not need to type them
+    const qp = (new URLSearchParams(location.search).get('p') || '').replace(/[^\p{L}\p{N} ._-]/gu, '').slice(0, 40);
+    if (qp) { st.name = qp; $('name').hidden = true; }
+    $('name').value = st.name || '';
+    const k = nDone();
+    if (k === P.length) { $('intro').hidden = true; finish(); return; }
+    if (k) { $('start').disabled = false; $('start').textContent = 'Continue'; $('pracMsg').textContent = `Welcome back! ${k} of ${P.length} done.`; $('pracMsg').className = 'msg good'; }
+    practice();
+    $('start').addEventListener('click', () => {
+      if (!$('name').hidden) st.name = $('name').value.trim().slice(0, 40); if (!nDone()) { st.t0 = new Date().toISOString(); st.t0ms = Date.now(); }
+      $('intro').hidden = true; $('trial').hidden = false; const f = P.findIndex((_, i) => !full(i)); show(f < 0 ? 0 : f); });
   }
   init();
 })();
 </script>
+</body>
+</html>

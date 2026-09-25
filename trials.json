@@ -1,0 +1,565 @@
+{
+ "version": 1,
+ "facts": [
+  {
+   "n": 1,
+   "id": 22605,
+   "subject": "cat",
+   "object": "dog",
+   "v": {
+    "o": {
+     "rel": "right_of",
+     "phrase": "to the right of",
+     "s": "a cat",
+     "o": "a dog",
+     "img": {
+      "x": "img/01ob7e669.jpg",
+      "y": "img/01oc052da.jpg"
+     }
+    },
+    "f": {
+     "rel": "left_of",
+     "phrase": "to the left of",
+     "s": "a cat",
+     "o": "a dog",
+     "img": {
+      "x": "img/01fbe58e4.jpg",
+      "y": "img/01fcaf64e.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 2,
+   "id": 40167,
+   "subject": "parrot",
+   "object": "curtain",
+   "v": {
+    "o": {
+     "rel": "left_of",
+     "phrase": "to the left of",
+     "s": "a parrot",
+     "o": "a curtain",
+     "img": {
+      "x": "img/02o92b7c1.jpg",
+      "y": "img/02o10e12c.jpg"
+     }
+    },
+    "f": {
+     "rel": "right_of",
+     "phrase": "to the right of",
+     "s": "a parrot",
+     "o": "a curtain",
+     "img": {
+      "x": "img/02f768c6d.jpg",
+      "y": "img/02fbbb8d5.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 3,
+   "id": 25308,
+   "subject": "trophy",
+   "object": "dog",
+   "v": {
+    "o": {
+     "rel": "left_of",
+     "phrase": "to the left of",
+     "s": "a trophy",
+     "o": "a dog",
+     "img": {
+      "x": "img/03o54e23d.jpg",
+      "y": "img/03o3ba270.jpg"
+     }
+    },
+    "f": {
+     "rel": "right_of",
+     "phrase": "to the right of",
+     "s": "a trophy",
+     "o": "a dog",
+     "img": {
+      "x": "img/03fca4e4a.jpg",
+      "y": "img/03fdea234.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 4,
+   "id": 17531,
+   "subject": "jacket",
+   "object": "horse",
+   "v": {
+    "o": {
+     "rel": "left_of",
+     "phrase": "to the left of",
+     "s": "a jacket",
+     "o": "a horse",
+     "img": {
+      "x": "img/04o2ff2a0.jpg",
+      "y": "img/04o32c023.jpg"
+     }
+    },
+    "f": {
+     "rel": "right_of",
+     "phrase": "to the right of",
+     "s": "a jacket",
+     "o": "a horse",
+     "img": {
+      "x": "img/04f8830de.jpg",
+      "y": "img/04fa560f1.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 5,
+   "id": 10484,
+   "subject": "dress",
+   "object": "flower",
+   "v": {
+    "o": {
+     "rel": "left_of",
+     "phrase": "to the left of",
+     "s": "a dress",
+     "o": "a flower",
+     "img": {
+      "x": "img/05of1aef4.jpg",
+      "y": "img/05oe9e4df.jpg"
+     }
+    },
+    "f": {
+     "rel": "right_of",
+     "phrase": "to the right of",
+     "s": "a dress",
+     "o": "a flower",
+     "img": {
+      "x": "img/05ff08482.jpg",
+      "y": "img/05f6a0e67.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 6,
+   "id": 857,
+   "subject": "window",
+   "object": "bottle",
+   "v": {
+    "o": {
+     "rel": "left_of",
+     "phrase": "to the left of",
+     "s": "a window",
+     "o": "a bottle",
+     "img": {
+      "x": "img/06o8aed47.jpg",
+      "y": "img/06o219901.jpg"
+     }
+    },
+    "f": {
+     "rel": "right_of",
+     "phrase": "to the right of",
+     "s": "a window",
+     "o": "a bottle",
+     "img": {
+      "x": "img/06fd16866.jpg",
+      "y": "img/06f0dbfe3.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 7,
+   "id": 43557,
+   "subject": "gate",
+   "object": "pig",
+   "v": {
+    "o": {
+     "rel": "right_of",
+     "phrase": "to the right of",
+     "s": "a gate",
+     "o": "a pig",
+     "img": {
+      "x": "img/07o4cb4a4.jpg",
+      "y": "img/07o3a2d06.jpg"
+     }
+    },
+    "f": {
+     "rel": "left_of",
+     "phrase": "to the left of",
+     "s": "a gate",
+     "o": "a pig",
+     "img": {
+      "x": "img/07f2d7be2.jpg",
+      "y": "img/07fda1e8e.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 8,
+   "id": 41139,
+   "subject": "coin",
+   "object": "pie",
+   "v": {
+    "o": {
+     "rel": "right_of",
+     "phrase": "to the right of",
+     "s": "a coin",
+     "o": "a pie",
+     "img": {
+      "x": "img/08o6b81ea.jpg",
+      "y": "img/08o5b445d.jpg"
+     }
+    },
+    "f": {
+     "rel": "left_of",
+     "phrase": "to the left of",
+     "s": "a coin",
+     "o": "a pie",
+     "img": {
+      "x": "img/08f8a3e0f.jpg",
+      "y": "img/08f814d86.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 9,
+   "id": 3669,
+   "subject": "tower",
+   "object": "blimp",
+   "v": {
+    "o": {
+     "rel": "left_of",
+     "phrase": "to the left of",
+     "s": "a tower",
+     "o": "a blimp",
+     "img": {
+      "x": "img/09o45672f.jpg",
+      "y": "img/09o584fb0.jpg"
+     }
+    },
+    "f": {
+     "rel": "right_of",
+     "phrase": "to the right of",
+     "s": "a tower",
+     "o": "a blimp",
+     "img": {
+      "x": "img/09fccfefd.jpg",
+      "y": "img/09f3f8c07.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 10,
+   "id": 1675,
+   "subject": "shark",
+   "object": "hand",
+   "v": {
+    "o": {
+     "rel": "left_of",
+     "phrase": "to the left of",
+     "s": "a shark",
+     "o": "a hand",
+     "img": {
+      "x": "img/10occe0cc.jpg",
+      "y": "img/10oed48d5.jpg"
+     }
+    },
+    "f": {
+     "rel": "right_of",
+     "phrase": "to the right of",
+     "s": "a shark",
+     "o": "a hand",
+     "img": {
+      "x": "img/10fc82c0b.jpg",
+      "y": "img/10f2701c1.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 11,
+   "id": 26267,
+   "subject": "pole",
+   "object": "trench coat",
+   "v": {
+    "o": {
+     "rel": "left_of",
+     "phrase": "to the left of",
+     "s": "a pole",
+     "o": "a trench coat",
+     "img": {
+      "x": "img/11o4a71b2.jpg",
+      "y": "img/11o709829.jpg"
+     }
+    },
+    "f": {
+     "rel": "right_of",
+     "phrase": "to the right of",
+     "s": "a pole",
+     "o": "a trench coat",
+     "img": {
+      "x": "img/11f94593f.jpg",
+      "y": "img/11fb2bbbe.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 12,
+   "id": 22493,
+   "subject": "lamp",
+   "object": "tv",
+   "v": {
+    "o": {
+     "rel": "right_of",
+     "phrase": "to the right of",
+     "s": "a lamp",
+     "o": "a TV",
+     "img": {
+      "x": "img/12o354006.jpg",
+      "y": "img/12ob9964f.jpg"
+     }
+    },
+    "f": {
+     "rel": "left_of",
+     "phrase": "to the left of",
+     "s": "a lamp",
+     "o": "a TV",
+     "img": {
+      "x": "img/12f183b08.jpg",
+      "y": "img/12ff4dbe3.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 13,
+   "id": 21457,
+   "subject": "keyboard",
+   "object": "monitor",
+   "v": {
+    "o": {
+     "rel": "below",
+     "phrase": "below",
+     "s": "a keyboard",
+     "o": "a monitor",
+     "img": {
+      "x": "img/13oaf7554.jpg",
+      "y": "img/13oe0e7b7.jpg"
+     }
+    },
+    "f": {
+     "rel": "above",
+     "phrase": "above",
+     "s": "a keyboard",
+     "o": "a monitor",
+     "img": {
+      "x": "img/13f43e732.jpg",
+      "y": "img/13f603720.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 14,
+   "id": 2606,
+   "subject": "lamp",
+   "object": "laptop",
+   "v": {
+    "o": {
+     "rel": "above",
+     "phrase": "above",
+     "s": "a lamp",
+     "o": "a laptop",
+     "img": {
+      "x": "img/14oce7d79.jpg",
+      "y": "img/14o5894ea.jpg"
+     }
+    },
+    "f": {
+     "rel": "below",
+     "phrase": "below",
+     "s": "a lamp",
+     "o": "a laptop",
+     "img": {
+      "x": "img/14f6e0b73.jpg",
+      "y": "img/14f896776.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 15,
+   "id": 18902,
+   "subject": "box",
+   "object": "apple",
+   "v": {
+    "o": {
+     "rel": "above",
+     "phrase": "above",
+     "s": "a box",
+     "o": "an apple",
+     "img": {
+      "x": "img/15o2b52f8.jpg",
+      "y": "img/15ofb08c8.jpg"
+     }
+    },
+    "f": {
+     "rel": "below",
+     "phrase": "below",
+     "s": "a box",
+     "o": "an apple",
+     "img": {
+      "x": "img/15fe53bab.jpg",
+      "y": "img/15fefd875.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 16,
+   "id": 26943,
+   "subject": "dog",
+   "object": "glasses",
+   "v": {
+    "o": {
+     "rel": "below",
+     "phrase": "below",
+     "s": "a dog",
+     "o": "a pair of glasses",
+     "img": {
+      "x": "img/16o826e0a.jpg",
+      "y": "img/16oa36d68.jpg"
+     }
+    },
+    "f": {
+     "rel": "above",
+     "phrase": "above",
+     "s": "a dog",
+     "o": "a pair of glasses",
+     "img": {
+      "x": "img/16f665107.jpg",
+      "y": "img/16f26c427.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 17,
+   "id": 26506,
+   "subject": "boat",
+   "object": "tower",
+   "v": {
+    "o": {
+     "rel": "below",
+     "phrase": "below",
+     "s": "a boat",
+     "o": "a tower",
+     "img": {
+      "x": "img/17oe90cc1.jpg",
+      "y": "img/17o5164e5.jpg"
+     }
+    },
+    "f": {
+     "rel": "above",
+     "phrase": "above",
+     "s": "a boat",
+     "o": "a tower",
+     "img": {
+      "x": "img/17fb1452e.jpg",
+      "y": "img/17f8f9fe6.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 18,
+   "id": 16096,
+   "subject": "fence",
+   "object": "door",
+   "v": {
+    "o": {
+     "rel": "below",
+     "phrase": "below",
+     "s": "a fence",
+     "o": "a door",
+     "img": {
+      "x": "img/18o7b795d.jpg",
+      "y": "img/18o33b491.jpg"
+     }
+    },
+    "f": {
+     "rel": "above",
+     "phrase": "above",
+     "s": "a fence",
+     "o": "a door",
+     "img": {
+      "x": "img/18f1415fa.jpg",
+      "y": "img/18f0d7539.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 19,
+   "id": 39985,
+   "subject": "barrel",
+   "object": "pipe",
+   "v": {
+    "o": {
+     "rel": "below",
+     "phrase": "below",
+     "s": "a barrel",
+     "o": "a pipe",
+     "img": {
+      "x": "img/19o52bab2.jpg",
+      "y": "img/19oc9cb9e.jpg"
+     }
+    },
+    "f": {
+     "rel": "above",
+     "phrase": "above",
+     "s": "a barrel",
+     "o": "a pipe",
+     "img": {
+      "x": "img/19f41ce42.jpg",
+      "y": "img/19f42f343.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 20,
+   "id": 46057,
+   "subject": "monitor",
+   "object": "keyboard",
+   "v": {
+    "o": {
+     "rel": "above",
+     "phrase": "above",
+     "s": "a monitor",
+     "o": "a keyboard",
+     "img": {
+      "x": "img/20o479eaf.jpg",
+      "y": "img/20od8902a.jpg"
+     }
+    },
+    "f": {
+     "rel": "below",
+     "phrase": "below",
+     "s": "a monitor",
+     "o": "a keyboard",
+     "img": {
+      "x": "img/20f38fcfb.jpg",
+      "y": "img/20f942491.jpg"
+     }
+    }
+   }
+  }
+ ]
+}

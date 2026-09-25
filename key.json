@@ -1,0 +1,210 @@
+{
+ "models": {
+  "x": "Self-Flow",
+  "y": "SSF (ours)"
+ },
+ "checkpoint": "SiT-XL/2 ImageNet 256, 1.3M steps, guidance 4x4 (paper Table 2 setting), results/showcase/imagenet_rel_cfg_clean/step1300000/{A,E}/combo_4x4",
+ "auto": {
+  "22605": {
+   "o": {
+    "x": 0.0,
+    "y": 1.0
+   },
+   "f": {
+    "x": 0.0,
+    "y": 1.0
+   }
+  },
+  "40167": {
+   "o": {
+    "x": 0.0,
+    "y": 1.0
+   },
+   "f": {
+    "x": 1.0,
+    "y": 1.0
+   }
+  },
+  "25308": {
+   "o": {
+    "x": 0.0,
+    "y": 1.0
+   },
+   "f": {
+    "x": 1.0,
+    "y": 1.0
+   }
+  },
+  "17531": {
+   "o": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "f": {
+    "x": 0.0,
+    "y": 1.0
+   }
+  },
+  "10484": {
+   "o": {
+    "x": 0.0,
+    "y": 1.0
+   },
+   "f": {
+    "x": 1.0,
+    "y": 1.0
+   }
+  },
+  "857": {
+   "o": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "f": {
+    "x": 0.0,
+    "y": 1.0
+   }
+  },
+  "43557": {
+   "o": {
+    "x": 0.0,
+    "y": 1.0
+   },
+   "f": {
+    "x": 1.0,
+    "y": 1.0
+   }
+  },
+  "41139": {
+   "o": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "f": {
+    "x": 0.0,
+    "y": 1.0
+   }
+  },
+  "3669": {
+   "o": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "f": {
+    "x": 0.0,
+    "y": 1.0
+   }
+  },
+  "1675": {
+   "o": {
+    "x": 0.0,
+    "y": 1.0
+   },
+   "f": {
+    "x": 1.0,
+    "y": 1.0
+   }
+  },
+  "26267": {
+   "o": {
+    "x": 1.0,
+    "y": 0.0
+   },
+   "f": {
+    "x": 0.0,
+    "y": 1.0
+   }
+  },
+  "22493": {
+   "o": {
+    "x": 0.0,
+    "y": 1.0
+   },
+   "f": {
+    "x": 1.0,
+    "y": 1.0
+   }
+  },
+  "21457": {
+   "o": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "f": {
+    "x": 0.0,
+    "y": 1.0
+   }
+  },
+  "2606": {
+   "o": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "f": {
+    "x": 0.0,
+    "y": 0.0
+   }
+  },
+  "18902": {
+   "o": {
+    "x": 0.0,
+    "y": 1.0
+   },
+   "f": {
+    "x": 1.0,
+    "y": 1.0
+   }
+  },
+  "26943": {
+   "o": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "f": {
+    "x": 0.0,
+    "y": 1.0
+   }
+  },
+  "26506": {
+   "o": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "f": {
+    "x": 0.0,
+    "y": 0.0
+   }
+  },
+  "16096": {
+   "o": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "f": {
+    "x": 0.0,
+    "y": 0.0
+   }
+  },
+  "39985": {
+   "o": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "f": {
+    "x": 0.0,
+    "y": 1.0
+   }
+  },
+  "46057": {
+   "o": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "f": {
+    "x": 0.0,
+    "y": 0.0
+   }
+  }
+ },
+ "selection": "20 of the 100 test prompts of the paper (Table 2). Kept prompts where OWLv2 detects both objects in all four images (both models, original and flipped relation), then a blind visual check (four images shuffled per prompt, models hidden) for clearly recognizable, non-overlapping objects; dropped worn items (shorts/t-shirt, collars, glasses on jackets, tassels), overlapping pairs (dog on bench, sign on fence, lettuce in a burger), and hard-to-recognize objects (strainer, garlic, soap, fire screen, colander without microwave). This conditions on both objects appearing. On these 20 prompts the automatic detector gives per-image accuracy 0.47 (Self-Flow) vs 0.88 (SSF) and both-correct 0/20 vs 15/20, compared to 0.32 vs 0.55 and 2% vs 32% on all 100 prompts."
+}
