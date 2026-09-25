@@ -238,6 +238,7 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
     if (!full(pos)) return;
     busy = true;
     const k = nDone(), n = P.length;
+    if (k % 5 === 0 && k < n) send(false);   // save progress every 5 rounds, in case the rater leaves
     if (k === Math.floor(n / 2) && !st.half) { st.half = 1; toast('Halfway there! 🙌'); }
     if (k === n - 1 && !st.last) { st.last = 1; toast('Last one! 🏁'); }
     setTimeout(() => { const nxt = P.findIndex((_, i) => !full(i) && i > pos), miss = P.findIndex((_, i) => !full(i));
