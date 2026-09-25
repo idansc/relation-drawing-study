@@ -172,7 +172,8 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
 (() => {
   const INBOX = 'https://ntfy.sh/ssf-heval-tj83te0syl33o0we7f';
   const KEY = 'rds-imagenet-v4';
-  const DRY = new URLSearchParams(location.search).has('dry');   // ?dry=1 previews the study without sending answers
+  // ?dry=1 previews the study without sending answers; local copies (localhost) never send
+  const DRY = new URLSearchParams(location.search).has('dry') || /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
   const $ = id => document.getElementById(id);
   let T = null, P = [], A = {}, pos = 0, st = null, shownAt = 0, busy = false, sentN = 0;
 

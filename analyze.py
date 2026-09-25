@@ -15,6 +15,8 @@ Models are coded x = Self-Flow and y = SSF (key.json).
 import argparse, collections, json, os, random, statistics, urllib.request
 
 TOPIC = 'ssf-heval-tj83te0syl33o0we7f'
+# submissions that are not real raters
+EXCLUDE = {'1uwpvq7': 'automated test run of the page (answers about 0.1 s after each round appeared), sent by a local copy on 2026-09-25'}
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -43,7 +45,7 @@ def raters(path):
             p = json.loads(json.loads(line)['message'])
         except (ValueError, KeyError):
             continue
-        if p.get('v') != 4 or not p.get('pid'):
+        if p.get('v') != 4 or not p.get('pid') or p['pid'] in EXCLUDE:
             continue
         score = (len(p.get('trials', [])), bool(p.get('final')))
         if p['pid'] not in best or score > best[p['pid']][0]:
