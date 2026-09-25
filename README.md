@@ -18,13 +18,14 @@ A three-minute blind study that compares **Self-Flow** and **SSF** on ImageNet (
 - Preview without sending answers: add `?dry=1`.
 
 ## Results
-ntfy.sh keeps messages for 12 hours only. While the study is open, run the script at least every 12 hours, or subscribe to the topic in the ntfy app:
+The page posts every submission to an ntfy.sh topic, which keeps messages for 12 hours only. A scheduled GitHub Action in the private repo [idansc/relation-study-responses](https://github.com/idansc/relation-study-responses) collects new messages every hour and commits them to `responses.jsonl`, so answers are stored permanently. To analyze:
 
 ```
-python3 analyze.py
+git clone git@github.com:idansc/relation-study-responses.git ../relation-study-responses
+python3 analyze.py --no-fetch --file ../relation-study-responses/responses.jsonl
 ```
 
-It appends new answers to `responses.jsonl` and prints the per-model accuracy with 95% bootstrap intervals over raters, the number of prompts where both the original and the flipped layout are correct (majority vote per image), the agreement with the automatic OWLv2 check, and the quality preferences. Use `--min-ms 800` to drop raters whose median answer time is below 800 ms.
+The script prints the per-model accuracy with 95% bootstrap intervals over raters, the number of prompts where both the original and the flipped layout are correct (majority vote per image), the agreement with the automatic OWLv2 check, and the quality preferences. Use `--min-ms 800` to drop raters whose median answer time is below 800 ms. Without `--no-fetch`, it also pulls the last 12 hours from ntfy directly.
 
 ## Prompts
 20 of the 100 test prompts of the paper. We kept prompts where OWLv2 detects both objects in all four images (both models, original and flipped relation), and then checked all four images of every prompt blind, i.e., shuffled and without model labels, for clearly recognizable and non-overlapping objects. We dropped worn items (e.g., shorts below a t-shirt), overlapping pairs (e.g., a dog on a bench), and objects that are hard to recognize (e.g., a strainer).
