@@ -139,7 +139,7 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
       <button class="alt" id="bNone">Neither</button>
     </div>
     <div class="q2" id="q2">
-      <div class="qt"><span class="step">2</span>Which looks better?<small>sharper, more realistic, fewer glitches</small></div>
+      <div class="qt"><span class="step">2</span>Which looks better?<small>sharper, more realistic, fewer glitches. A caption may ask for an odd layout, so do not count the layout itself.</small></div>
       <div class="seg">
         <button class="alt" id="qA">A</button>
         <button class="alt" id="qS">About the same</button>
@@ -149,6 +149,7 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
     <div class="foot">
       <button class="link" id="back">← Back</button>
       <span class="keys" id="keys">Keys: ← A · → B · ↑ Both · ↓ Neither</span>
+      <button class="link" id="stop" hidden>Finish now ✓</button>
     </div>
   </section>
 
@@ -158,6 +159,7 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
     <p class="lead" id="stats"></p>
     <p class="status" id="sendMsg" aria-live="polite"></p>
     <div class="row" style="justify-content:center">
+      <button class="btn" id="more" hidden>Keep going</button>
       <button class="btn ghost" id="share">Copy link for a friend</button>
     </div>
     <details><summary>Backup code (only if sending failed)</summary><textarea id="code" rows="4" readonly></textarea></details>
@@ -209,14 +211,14 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
     pos = i; const t = P[i], v = fact(t.n).v[t.v], right = t.left === 'x' ? 'y' : 'x';
     $('cap').innerHTML = captionHTML(v);
     $('iA').src = v.img[t.left]; $('iB').src = v.img[right];
-    paint(); $('back').disabled = i === 0;
+    paint(); $('back').disabled = i === 0; $('stop').hidden = nDone() === 0;
     $('trial').classList.remove('fade'); void $('trial').offsetWidth; $('trial').classList.add('fade');
     shownAt = performance.now(); busy = false; dots(); save();
   }
   function payload(final) {
     const rows = P.map((t, i) => A[i] && (A[i].c || A[i].q) ? {n: t.n, id: t.id, v: t.v, left: t.left, c: A[i].c || null, q: A[i].q || null, ms: A[i].ms, msq: A[i].msq} : null).filter(Boolean);
     return JSON.stringify({v: 4, pid: st.pid, name: st.name, seed: st.seed, t0: st.t0, dur: Math.round(Date.now() - st.t0ms),
-      ua: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? 'm' : 'd', practice: st.practice, final, trials: rows});
+      ua: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? 'm' : 'd', practice: st.practice, final, early: nDone() < P.length, trials: rows});
   }
   function send(final) {
     const n = nDone(); if (DRY || !n || (!final && n <= sentN)) return Promise.resolve(true);
@@ -241,12 +243,15 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
       if (nxt >= 0) show(nxt); else if (miss >= 0) show(miss); else finish(); }, 380);
   }
   function finish() {
-    $('trial').hidden = true; $('done').hidden = false; dots();
-    const s = Math.round((Date.now() - st.t0ms) / 1000);
-    $('stats').textContent = `You judged ${P.length} pairs in ${s >= 60 ? Math.floor(s / 60) + ' min ' : ''}${s % 60} s. Your answers help us check how well AI models follow words like “left of” and “above”.`;
+    const k = nDone(), early = k < P.length; st.ended = true; save();
+    $('trial').hidden = true; $('done').hidden = false; $('more').hidden = !early; dots();
+    const s = Math.round((Date.now() - st.t0ms) / 1000), dur = `${s >= 60 ? Math.floor(s / 60) + ' min ' : ''}${s % 60} s`;
+    $('stats').textContent = early ? `You judged ${k} of ${P.length} pairs in ${dur}. Every answer helps, thank you! Want to do a few more? Tap Keep going.`
+                                   : `You judged ${P.length} pairs in ${dur}. Your answers help us check how well AI models follow words like “left of” and “above”.`;
     $('code').value = payload(true);
-    $('sendMsg').textContent = 'Sending your answers…';
-    send(true).then(ok => { $('sendMsg').textContent = DRY ? 'Preview mode (?dry=1): answers were not sent.' : ok ? 'Answers received. Nothing else to do. ✔' : 'Sending failed. Please copy the backup code below and send it to the person who shared this link.'; });
+    const msg = ok => DRY ? 'Preview mode (?dry=1): answers were not sent.' : ok ? 'Answers received. Nothing else to do. ✔' : 'Sending failed. Please copy the backup code below and send it to the person who shared this link.';
+    if (k > (st.finalN || 0)) { $('sendMsg').textContent = 'Sending your answers…'; send(true).then(ok => { if (ok) { st.finalN = k; save(); } $('sendMsg').textContent = msg(ok); }); }
+    else $('sendMsg').textContent = msg(true);
     confetti();
   }
 
@@ -276,6 +281,8 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
   $('bBoth').addEventListener('click', () => answer('c', 'both')); $('bNone').addEventListener('click', () => answer('c', 'neither'));
   $('qA').addEventListener('click', () => answer('q', 'A')); $('qB').addEventListener('click', () => answer('q', 'B')); $('qS').addEventListener('click', () => answer('q', 'same'));
   $('back').addEventListener('click', () => { if (pos > 0) show(pos - 1); });
+  $('stop').addEventListener('click', () => { if (nDone() && confirm(`Finish now? Your ${nDone()} answers so far will be sent.`)) finish(); });
+  $('more').addEventListener('click', () => { st.ended = false; save(); $('done').hidden = true; $('trial').hidden = false; const f = P.findIndex((_, i) => !full(i)); show(f < 0 ? 0 : f); });
   $('share').addEventListener('click', () => { const u = location.origin + location.pathname;
     (navigator.clipboard ? navigator.clipboard.writeText(u) : Promise.reject()).then(() => toast('Link copied 🔗'), () => toast(u)); });
   document.addEventListener('keydown', e => {
@@ -300,7 +307,7 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
     if (qp) { st.name = qp; $('name').hidden = true; }
     $('name').value = st.name || '';
     const k = nDone();
-    if (k === P.length) { $('intro').hidden = true; finish(); return; }
+    if (k === P.length || (st.ended && k)) { $('intro').hidden = true; finish(); return; }
     if (k) { $('start').disabled = false; $('start').textContent = 'Continue'; $('pracMsg').textContent = `Welcome back! ${k} of ${P.length} done.`; $('pracMsg').className = 'msg good'; }
     practice();
     $('start').addEventListener('click', () => {
