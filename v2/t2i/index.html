@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Does the picture match?</title>
+<meta name="description" content="A six-minute study: does the picture show what the caption says?">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖼️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&display=swap">
+<style>
+[hidden]{display:none!important}
+:root{
+  --bg:#f6f4ef; --card:#ffffff; --ink:#1d2127; --ink2:#5d6570; --line:#e3e0d8;
+  --accent:#5b4cf0; --accent2:#eeecff; --rel:#ffd54a; --rel-ink:#3a2c00; --ok:#1f9d6a; --bad:#d9463b;
+  --shadow:0 10px 30px -12px rgba(30,20,90,.35);
+  --font:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#15161c; --card:#1f2129; --ink:#eef0f4; --ink2:#a6adb9; --line:#2f323c;
+         --accent:#8f84ff; --accent2:#2a2750; --rel:#ffd54a; --rel-ink:#2a2000; --shadow:0 10px 30px -12px rgba(0,0,0,.7); }
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);-webkit-tap-highlight-color:transparent}
+.app{max-width:860px;margin:0 auto;padding:14px 16px 40px;display:flex;flex-direction:column;gap:14px;min-height:100vh}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{font-weight:900;font-size:17px;letter-spacing:.2px}
+.brand span{color:var(--accent)}
+.dots{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.dot{width:11px;height:11px;border-radius:50%;background:var(--line);transition:transform .25s,background .25s}
+.dot.on{background:var(--accent)}
+.dot.cur{outline:2px solid var(--accent);outline-offset:2px;animation:pulse 1.4s infinite}
+@keyframes pulse{50%{transform:scale(1.25)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:var(--shadow)}
+h1{font-size:clamp(26px,5vw,36px);line-height:1.12;margin:0 0 8px;font-weight:900;letter-spacing:-.3px}
+.lead{font-size:17px;color:var(--ink2);margin:0 0 16px;line-height:1.45}
+.qlabel{font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);text-align:center}
+.caption{font-size:clamp(26px,5.6vw,42px);font-weight:800;line-height:1.2;text-align:center;margin:6px 0 16px;letter-spacing:-.3px;text-wrap:balance}
+.caption b{font-weight:900}
+.rel{display:inline-block;background:var(--rel);color:var(--rel-ink);padding:0 .32em;border-radius:.3em;transform:rotate(-1.5deg);white-space:nowrap;box-shadow:0 3px 0 rgba(0,0,0,.12)}
+.pics{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pic{position:relative;border:0;padding:0;border-radius:18px;background:#000;cursor:pointer;overflow:hidden;aspect-ratio:1;
+     outline:4px solid transparent;outline-offset:3px;transition:transform .15s,outline-color .15s,box-shadow .15s}
+.pic img{width:100%;height:100%;object-fit:cover;display:block;image-rendering:auto}
+.pic .tag{position:absolute;left:10px;top:10px;background:rgba(255,255,255,.92);color:#111;font-weight:900;font-size:17px;
+          width:34px;height:34px;border-radius:50%;display:grid;place-items:center;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.pic .check{position:absolute;inset:0;display:grid;place-items:center;font-size:84px;color:#fff;opacity:0;background:rgba(91,76,240,.28);transition:opacity .15s}
+@media (hover:hover){.pic:hover{transform:translateY(-3px);outline-color:var(--accent2);box-shadow:var(--shadow)}}
+.pic:focus-visible{outline-color:var(--accent)}
+.pic.sel{outline-color:var(--accent)}
+.pic.sel .check{opacity:1}
+.alts{display:flex;gap:12px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+.alt{font:inherit;font-weight:800;font-size:17px;padding:12px 26px;border-radius:999px;border:2px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;min-width:140px;transition:transform .1s,border-color .15s,background .15s}
+.alt:hover{border-color:var(--accent)}
+.alt.sel{background:var(--accent);border-color:var(--accent);color:#fff}
+.alt:active,.pic:active{transform:scale(.97)}
+.foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:10px;flex-wrap:wrap}
+.link{font:inherit;font-weight:800;color:var(--ink2);background:none;border:0;cursor:pointer;padding:6px 2px}
+.link:disabled{opacity:.3;cursor:default}
+.keys{font-size:13px;color:var(--ink2)}
+@media (hover:none){.keys{display:none}}
+.btn{font:inherit;font-weight:900;font-size:18px;padding:14px 30px;border-radius:999px;border:0;background:var(--accent);color:#fff;cursor:pointer;box-shadow:0 6px 0 rgba(40,30,140,.35);transition:transform .1s,box-shadow .1s,opacity .2s}
+.btn:active{transform:translateY(3px);box-shadow:0 3px 0 rgba(40,30,140,.35)}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--accent);box-shadow:none;border:2px solid var(--accent);font-size:16px;padding:10px 20px}
+.practice{border:2px dashed var(--line);border-radius:18px;padding:14px;margin:4px 0 16px}
+.practice .caption{font-size:clamp(22px,4.6vw,30px);margin:4px 0 12px}
+.emo{font-size:clamp(40px,11vw,72px);background:var(--accent2);display:flex;align-items:center;justify-content:center;gap:.25em;aspect-ratio:auto;padding:18px 0;border-radius:16px}
+.emo span{display:inline-block}
+.shake{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.msg{text-align:center;font-weight:800;min-height:1.4em;margin:10px 0 0;color:var(--ink2)}
+.msg.good{color:var(--ok)} .msg.badm{color:var(--bad)}
+.rules{margin:0 0 16px;padding-left:20px;color:var(--ink2);line-height:1.6;font-size:16px}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+input[type=text]{font:inherit;font-size:16px;padding:11px 14px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink);min-width:0;flex:1;max-width:280px}
+input[type=text]:focus{outline:none;border-color:var(--accent)}
+.toast{position:fixed;left:50%;top:18px;transform:translate(-50%,-80px);background:var(--ink);color:var(--bg);font-weight:800;padding:10px 18px;border-radius:999px;transition:transform .35s;z-index:5;white-space:nowrap}
+.toast.show{transform:translate(-50%,0)}
+.center{text-align:center}
+.big{font-size:64px;line-height:1}
+.status{color:var(--ink2);font-weight:700}
+details{margin-top:14px;color:var(--ink2)}
+textarea{width:100%;font:12px/1.4 ui-monospace,Menlo,monospace;margin-top:8px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:8px}
+.fade{animation:fade .28s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
+.small{font-size:13px;color:var(--ink2);margin-top:14px;line-height:1.5}
+@media (max-width:520px){.card{padding:16px;border-radius:18px}.pics{gap:9px}.alt{min-width:0;flex:1;padding:12px 10px}.pic .tag{width:28px;height:28px;font-size:14px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.step{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;font-weight:900;margin-right:8px;vertical-align:2px;letter-spacing:0}
+.q2{margin-top:18px;padding:14px;border-radius:16px;border:2px solid var(--line);transition:border-color .2s,background .2s,opacity .2s;opacity:.55}
+.q2.on{opacity:1;border-color:var(--accent);background:var(--accent2)}
+.q2 .qt{font-weight:900;font-size:clamp(18px,3.6vw,22px);text-align:center}
+.q2 .qt small{display:block;font-weight:700;font-size:13px;color:var(--ink2);margin-top:2px}
+.seg{display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:10px;margin-top:10px}
+.seg .alt{min-width:0;padding:11px 8px}
+.seg2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.seg4{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px}
+.seg2 .alt,.seg4 .alt{min-width:0;padding:11px 6px}
+.pics.one{grid-template-columns:1fr;max-width:420px;margin:0 auto}
+.one .pic{cursor:default}
+</style>
+</head>
+<body>
+<main class="app">
+  <header class="top">
+    <div class="brand">Does the picture <span>match?</span></div>
+    <div class="dots" id="dots" aria-hidden="true"></div>
+  </header>
+
+  <section class="card fade" id="intro">
+    <h1>Does the picture show the caption?</h1>
+    <p class="lead"><b id="nRounds">40</b> quick rounds, about six minutes. Each round shows one picture and its caption. Answer three short questions: <b>1</b>&nbsp;which objects are in the picture, <b>2</b>&nbsp;whether there is more than one of them, and <b>3</b>&nbsp;whether the picture shows the caption.</p>
+    <div class="practice">
+      <div class="qlabel">Warm-up: does this show the caption?</div>
+      <div class="caption">a <b>cat</b> <span class="rel">to the left of</span> a <b>dog</b></div>
+      <div class="pics one"><div class="pic emo" aria-label="dog then cat"><span>🐶</span><span>🐱</span></div></div>
+      <div class="alts" id="prac"><button class="alt" data-ok="0">Yes</button><button class="alt" data-ok="1">No</button></div>
+      <p class="msg" id="pracMsg">Here the dog is on the left, so the answer is No.</p>
+    </div>
+    <ul class="rules">
+      <li>For question 3, only <b>where</b> things are matters, not how nice the picture looks. If an object is missing, the picture does not show the caption.</li>
+      <li>If you cannot decide, e.g., the objects are too unclear, tap <b>Can't tell</b>.</li>
+      <li><b>The models are still in the middle of training</b>, so pictures are not perfect yet. Just do your best.</li>
+    </ul>
+    <div class="row">
+      <input type="text" id="name" maxlength="40" placeholder="Name or initials (optional)" autocomplete="nickname" aria-label="Name or initials (optional)">
+      <button class="btn" id="start" disabled>Start</button>
+    </div>
+    <p class="small">The pictures were drawn by AI image models from text. Which model drew a picture is hidden.</p>
+  </section>
+
+  <section class="card" id="trial" hidden>
+    <div class="caption" id="cap"></div>
+    <div class="pics one"><div class="pic" id="pic"><img id="img" alt=""></div></div>
+    <div class="q2 on" id="q1">
+      <div class="qt"><span class="step">1</span>Which do you see?</div>
+      <div class="seg4">
+        <button class="alt" id="sBoth"></button>
+        <button class="alt" id="sS"></button>
+        <button class="alt" id="sO"></button>
+        <button class="alt" id="sNone">Neither</button>
+      </div>
+    </div>
+    <div class="q2" id="q2">
+      <div class="qt"><span class="step">2</span><span id="qMulti"></span></div>
+      <div class="seg2">
+        <button class="alt" id="mY">Yes</button>
+        <button class="alt" id="mN">No</button>
+      </div>
+    </div>
+    <div class="q2" id="q3">
+      <div class="qt"><span class="step">3</span>Does the picture show the caption?</div>
+      <div class="seg">
+        <button class="alt" id="rY">Yes</button>
+        <button class="alt" id="rU">Can't tell</button>
+        <button class="alt" id="rN">No</button>
+      </div>
+    </div>
+    <div class="foot">
+      <button class="link" id="back">← Back</button>
+      <span class="keys">Keys: 1–4 · Y / N · Y / C / N</span>
+      <button class="link" id="stop" hidden>Finish now ✓</button>
+    </div>
+  </section>
+
+  <section class="card center" id="done" hidden>
+    <div class="big">🎉</div>
+    <h1>Thank you!</h1>
+    <p class="lead" id="stats"></p>
+    <p class="status" id="sendMsg" aria-live="polite"></p>
+    <div class="row" style="justify-content:center">
+      <button class="btn" id="more" hidden>Keep going</button>
+      <button class="btn ghost" id="share">Copy link for a friend</button>
+    </div>
+    <details><summary>Backup code (only if sending failed)</summary><textarea id="code" rows="4" readonly></textarea></details>
+  </section>
+</main>
+<div class="toast" id="toast"></div>
+
+<script>
+(() => {
+  const INBOX = 'https://ntfy.sh/ssf-t2iaudit-fs4kgt0auiycrkp8';
+  const KEY = 'rds-t2i-audit-v1', ROUNDS = 40;
+  const DRY = new URLSearchParams(location.search).has('dry') || /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+  const $ = id => document.getElementById(id);
+  let T = null, P = [], A = {}, pos = 0, st = null, shownAt = 0, busy = false, sentN = 0;
+  const rng = s => () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296;
+  const shuffle = (a, r) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify({st, A, pos, sentN})); } catch (e) {} };
+  const load = () => { try { return JSON.parse(localStorage.getItem(KEY)); } catch (e) { return null; } };
+  const toast = t => { const el = $('toast'); el.textContent = t; el.classList.add('show'); clearTimeout(toast.h); toast.h = setTimeout(() => el.classList.remove('show'), 1300); };
+  const item = n => T.items.find(x => x.n === n);
+  const full = i => A[i] && A[i].s && A[i].m && A[i].r;
+  const nDone = () => P.filter((_, i) => full(i)).length;
+  const art = w => (/^[aeiou]/i.test(w) ? 'an ' : 'a ') + w;
+
+  function plan(seed) {
+    // ROUNDS different captions per rater; each (model, caption as written or flipped) combination equally often
+    const r = rng(seed), n = Math.min(ROUNDS, T.items.length), pick = shuffle(T.items, r).slice(0, n);
+    const combos = shuffle(Array.from({length: n}, (_, i) => [['x', 'o'], ['x', 'f'], ['y', 'o'], ['y', 'f']][i % 4]), r);
+    return pick.map((it, i) => ({n: it.n, id: it.id, m: combos[i][0], v: combos[i][1]}));
+  }
+  function dots() { const on = !$('trial').hidden;
+    $('dots').innerHTML = P.map((t, i) => `<i class="dot${full(i) ? ' on' : ''}${on && i === pos ? ' cur' : ''}"></i>`).join(''); }
+  const B = {s: {both: 'sBoth', s: 'sS', o: 'sO', none: 'sNone'}, m: {yes: 'mY', no: 'mN'}, r: {yes: 'rY', unsure: 'rU', no: 'rN'}};
+  function paint() { const a = A[pos] || {};
+    Object.values(B).forEach(g => Object.values(g).forEach(id => $(id).classList.remove('sel')));
+    ['s', 'm', 'r'].forEach(k => { if (a[k]) $(B[k][a[k]]).classList.add('sel'); });
+    $('q2').classList.toggle('on', !!a.s); $('q3').classList.toggle('on', !!(a.s && a.m)); }
+  function show(i) {
+    pos = i; const t = P[i], v = item(t.n).v[t.v];
+    $('cap').innerHTML = `${art('<b>' + v.s + '</b>')} <span class="rel">${v.rel}</span> ${art('<b>' + v.o + '</b>')}`;
+    $('img').src = v.img[t.m];
+    $('sBoth').textContent = `Both`; $('sS').textContent = `Only ${art(v.s)}`; $('sO').textContent = `Only ${art(v.o)}`;
+    $('qMulti').textContent = `Is there more than one ${v.s} or more than one ${v.o}?`;
+    const nx = P[i + 1]; if (nx) { const im = new Image(); im.src = item(nx.n).v[nx.v].img[nx.m]; }
+    paint(); $('back').disabled = i === 0; $('stop').hidden = nDone() === 0;
+    $('trial').classList.remove('fade'); void $('trial').offsetWidth; $('trial').classList.add('fade');
+    shownAt = performance.now(); busy = false; dots(); save();
+  }
+  function payload(final) {
+    const rows = P.map((t, i) => A[i] && (A[i].s || A[i].m || A[i].r) ? {n: t.n, id: t.id, v: t.v, m: t.m, s: A[i].s || null, multi: A[i].m || null, r: A[i].r || null, ms: A[i].ms} : null).filter(Boolean);
+    return JSON.stringify({v: 1, study: 't2i-audit', pid: st.pid, name: st.name, seed: st.seed, t0: st.t0, dur: Math.round(Date.now() - st.t0ms),
+      ua: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? 'm' : 'd', practice: st.practice, final, early: nDone() < P.length, trials: rows});
+  }
+  function send(final) { const n = nDone(); if (DRY || !n || (!final && n <= sentN)) return Promise.resolve(true);
+    return fetch(INBOX, {method: 'POST', body: payload(final), headers: {Title: final ? 'final' : 'partial'}}).then(r => { if (r.ok) { sentN = n; save(); } return r.ok; }, () => false); }
+  function sendOnLeave() { const n = nDone(); if (DRY || !n || n <= sentN || !st) return; try { if (navigator.sendBeacon(INBOX, payload(false))) { sentN = n; save(); } } catch (e) {} }
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') sendOnLeave(); });
+  window.addEventListener('pagehide', sendOnLeave);
+
+  function answer(k, val) {
+    if (busy || $('trial').hidden) return;
+    const a = A[pos] = A[pos] || {};
+    if (k === 'm' && !a.s) { toast('First: which do you see? ☝️'); return; }
+    if (k === 'r' && (!a.s || !a.m)) { toast(!a.s ? 'First: which do you see? ☝️' : 'Next: more than one? ☝️'); return; }
+    a[k] = val; if (k === 'r') a.ms = Math.round(performance.now() - shownAt);
+    paint(); dots(); save();
+    if (!full(pos)) return;
+    busy = true; const k2 = nDone(), n = P.length;
+    if (k2 % 5 === 0 && k2 < n) send(false);
+    if (k2 === Math.floor(n / 2) && !st.half) { st.half = 1; toast('Halfway there! 🙌'); }
+    if (k2 === n - 1 && !st.last) { st.last = 1; toast('Last one! 🏁'); }
+    setTimeout(() => { const nxt = P.findIndex((_, i) => !full(i) && i > pos), miss = P.findIndex((_, i) => !full(i));
+      if (nxt >= 0) show(nxt); else if (miss >= 0) show(miss); else finish(); }, 350);
+  }
+  function finish() {
+    const k = nDone(), early = k < P.length; st.ended = true; save();
+    $('trial').hidden = true; $('done').hidden = false; $('more').hidden = !early; dots();
+    const s = Math.round((Date.now() - st.t0ms) / 1000), dur = `${s >= 60 ? Math.floor(s / 60) + ' min ' : ''}${s % 60} s`;
+    $('stats').textContent = early ? `You judged ${k} of ${P.length} pictures in ${dur}. Every answer helps, thank you! Want to do a few more? Tap Keep going.`
+                                   : `You judged ${P.length} pictures in ${dur}. Your answers help us check how well AI models follow words like “left of” and “above”.`;
+    $('code').value = payload(true);
+    const msg = ok => DRY ? 'Preview mode (?dry=1): answers were not sent.' : ok ? 'Answers received. Nothing else to do. ✔' : 'Sending failed. Please copy the backup code below and send it to the person who shared this link.';
+    if (k > (st.finalN || 0)) { $('sendMsg').textContent = 'Sending your answers…'; send(true).then(ok => { if (ok) { st.finalN = k; save(); } $('sendMsg').textContent = msg(ok); }); }
+    else $('sendMsg').textContent = msg(true);
+  }
+  function practice() {
+    $('prac').querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+      st.practice = (st.practice || 0) + 1;
+      if (b.dataset.ok === '1') { b.classList.add('sel'); $('pracMsg').textContent = 'Right: the dog is on the left, so No. 🎯 Ready when you are.'; $('pracMsg').className = 'msg good'; $('start').disabled = false; }
+      else { b.classList.remove('shake'); void b.offsetWidth; b.classList.add('shake'); $('pracMsg').textContent = 'Look again: which animal is on the left?'; $('pracMsg').className = 'msg badm'; }
+      save(); }));
+  }
+  [['sBoth', 's', 'both'], ['sS', 's', 's'], ['sO', 's', 'o'], ['sNone', 's', 'none'], ['mY', 'm', 'yes'], ['mN', 'm', 'no'], ['rY', 'r', 'yes'], ['rU', 'r', 'unsure'], ['rN', 'r', 'no']]
+    .forEach(([id, k, v]) => $(id).addEventListener('click', () => answer(k, v)));
+  $('back').addEventListener('click', () => { if (pos > 0) show(pos - 1); });
+  $('stop').addEventListener('click', () => { if (nDone() && confirm(`Finish now? Your ${nDone()} answers so far will be sent.`)) finish(); });
+  $('more').addEventListener('click', () => { st.ended = false; save(); $('done').hidden = true; $('trial').hidden = false; const f = P.findIndex((_, i) => !full(i)); show(f < 0 ? 0 : f); });
+  $('share').addEventListener('click', () => { const u = location.origin + location.pathname;
+    (navigator.clipboard ? navigator.clipboard.writeText(u) : Promise.reject()).then(() => toast('Link copied 🔗'), () => toast(u)); });
+  document.addEventListener('keydown', e => {
+    if ($('trial').hidden || e.target.tagName === 'INPUT') return;
+    const a = A[pos] || {}, key = e.key.toLowerCase();
+    if (!a.s) { const m = {'1': 'both', '2': 's', '3': 'o', '4': 'none'}[key]; if (m) { e.preventDefault(); answer('s', m); } }
+    else if (!a.m) { const m = {y: 'yes', n: 'no'}[key]; if (m) { e.preventDefault(); answer('m', m); } }
+    else { const m = {y: 'yes', c: 'unsure', n: 'no'}[key]; if (m) { e.preventDefault(); answer('r', m); } }
+    if (e.key === 'Backspace' && pos > 0) { e.preventDefault(); show(pos - 1); }
+  });
+  async function init() {
+    try { T = await (await fetch('trials.json', {cache: 'no-cache'})).json(); }
+    catch (e) { $('pracMsg').textContent = 'The study failed to load. Please reload the page.'; return; }
+    $('nRounds').textContent = Math.min(ROUNDS, T.items.length);
+    const saved = load();
+    if (saved && saved.st && saved.st.seed) { ({st, A, pos} = saved); sentN = saved.sentN || 0; }
+    else { const b = new Uint32Array(2); crypto.getRandomValues(b); st = {seed: b[0] >>> 0, pid: b[1].toString(36), name: '', practice: 0, t0: new Date().toISOString(), t0ms: Date.now()}; }
+    P = plan(st.seed); dots();
+    const qp = (new URLSearchParams(location.search).get('p') || '').replace(/[^\p{L}\p{N} ._-]/gu, '').slice(0, 40);
+    if (qp) { st.name = qp; $('name').hidden = true; }
+    $('name').value = st.name || '';
+    const k = nDone();
+    if (k === P.length || (st.ended && k)) { $('intro').hidden = true; finish(); return; }
+    if (k) { $('start').disabled = false; $('start').textContent = 'Continue'; $('pracMsg').textContent = `Welcome back! ${k} of ${P.length} done.`; $('pracMsg').className = 'msg good'; }
+    practice();
+    $('start').addEventListener('click', () => {
+      if (!$('name').hidden) st.name = $('name').value.trim().slice(0, 40); if (!nDone()) { st.t0 = new Date().toISOString(); st.t0ms = Date.now(); }
+      $('intro').hidden = true; $('trial').hidden = false; const f = P.findIndex((_, i) => !full(i)); show(f < 0 ? 0 : f); });
+  }
+  init();
+})();
+</script>
+</body>
+</html>
