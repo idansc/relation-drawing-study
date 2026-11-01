@@ -36,3 +36,9 @@ This conditions the study on both objects appearing. On these 20 prompts, the au
 `index.html` (the study), `trials.json` (prompts and images), `img/`, `key.json` (model key, selection, automatic scores), `analyze.py` (collection and analysis).
 
 Forked from [avivwei96/relation-drawing-study](https://github.com/avivwei96/relation-drawing-study).
+
+## v3_4m: single-picture study at 4M steps
+
+Live: https://idansc.github.io/relation-drawing-study/v3_4m/ (preview without sending: `?dry=1`)
+
+The same models at 4M steps (EMA, guidance 4×4), same prompts and noise as above. Each round shows **one** caption and **one** picture. Question 1: does the picture show the caption? (Yes / No). Question 2: how good does the picture look? (1 very poor to 5 excellent). Every rater sees each prompt once; a Latin square over four groups balances original/flipped captions and the two models, and the four groups together show every image once. Hand out links in rotation: `v3_4m/?g=0`, `?g=1`, `?g=2`, `?g=3` (combine with `&p=AW` for initials). Answers go to their own ntfy topic (payload `v: 7`, study `imagenet-4m-v3`), which the private collector stores in its own file, `responses_imagenet_4m.jsonl`, separate from the paper study's answers. The model key and analysis stay outside this repo until the study closes. The prompt list is provisional until the blind gallery selection is final.

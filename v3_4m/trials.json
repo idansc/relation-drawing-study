@@ -1,0 +1,567 @@
+{
+ "version": 1,
+ "study": "imagenet-4m-v3",
+ "status": "PROVISIONAL",
+ "facts": [
+  {
+   "n": 1,
+   "id": 22605,
+   "subject": "cat",
+   "object": "dog",
+   "v": {
+    "o": {
+     "rel": "right_of",
+     "phrase": "to the right of",
+     "s": "a cat",
+     "o": "a dog",
+     "img": {
+      "x": "img/01o8a77a9e.jpg",
+      "y": "img/01obdb9a47.jpg"
+     }
+    },
+    "f": {
+     "rel": "left_of",
+     "phrase": "to the left of",
+     "s": "a cat",
+     "o": "a dog",
+     "img": {
+      "x": "img/01f967fcee.jpg",
+      "y": "img/01fe96b572.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 2,
+   "id": 40167,
+   "subject": "parrot",
+   "object": "curtain",
+   "v": {
+    "o": {
+     "rel": "left_of",
+     "phrase": "to the left of",
+     "s": "a parrot",
+     "o": "a curtain",
+     "img": {
+      "x": "img/02of112868.jpg",
+      "y": "img/02o9ef5199.jpg"
+     }
+    },
+    "f": {
+     "rel": "right_of",
+     "phrase": "to the right of",
+     "s": "a parrot",
+     "o": "a curtain",
+     "img": {
+      "x": "img/02f3422833.jpg",
+      "y": "img/02f7fa22cd.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 3,
+   "id": 25308,
+   "subject": "trophy",
+   "object": "dog",
+   "v": {
+    "o": {
+     "rel": "left_of",
+     "phrase": "to the left of",
+     "s": "a trophy",
+     "o": "a dog",
+     "img": {
+      "x": "img/03o2216219.jpg",
+      "y": "img/03ofe0cdf4.jpg"
+     }
+    },
+    "f": {
+     "rel": "right_of",
+     "phrase": "to the right of",
+     "s": "a trophy",
+     "o": "a dog",
+     "img": {
+      "x": "img/03f7d17d97.jpg",
+      "y": "img/03f528e3c9.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 4,
+   "id": 17531,
+   "subject": "jacket",
+   "object": "horse",
+   "v": {
+    "o": {
+     "rel": "left_of",
+     "phrase": "to the left of",
+     "s": "a jacket",
+     "o": "a horse",
+     "img": {
+      "x": "img/04oaae1bba.jpg",
+      "y": "img/04od6fe77e.jpg"
+     }
+    },
+    "f": {
+     "rel": "right_of",
+     "phrase": "to the right of",
+     "s": "a jacket",
+     "o": "a horse",
+     "img": {
+      "x": "img/04f8e2c990.jpg",
+      "y": "img/04fcd600d6.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 5,
+   "id": 10484,
+   "subject": "dress",
+   "object": "flower",
+   "v": {
+    "o": {
+     "rel": "left_of",
+     "phrase": "to the left of",
+     "s": "a dress",
+     "o": "a flower",
+     "img": {
+      "x": "img/05o0dda655.jpg",
+      "y": "img/05ob29b676.jpg"
+     }
+    },
+    "f": {
+     "rel": "right_of",
+     "phrase": "to the right of",
+     "s": "a dress",
+     "o": "a flower",
+     "img": {
+      "x": "img/05f21761a9.jpg",
+      "y": "img/05f33eb342.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 6,
+   "id": 857,
+   "subject": "window",
+   "object": "bottle",
+   "v": {
+    "o": {
+     "rel": "left_of",
+     "phrase": "to the left of",
+     "s": "a window",
+     "o": "a bottle",
+     "img": {
+      "x": "img/06of07db7b.jpg",
+      "y": "img/06of2c5577.jpg"
+     }
+    },
+    "f": {
+     "rel": "right_of",
+     "phrase": "to the right of",
+     "s": "a window",
+     "o": "a bottle",
+     "img": {
+      "x": "img/06f825619f.jpg",
+      "y": "img/06f3dc2ca5.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 7,
+   "id": 43557,
+   "subject": "gate",
+   "object": "pig",
+   "v": {
+    "o": {
+     "rel": "right_of",
+     "phrase": "to the right of",
+     "s": "a gate",
+     "o": "a pig",
+     "img": {
+      "x": "img/07o437ed57.jpg",
+      "y": "img/07o6726044.jpg"
+     }
+    },
+    "f": {
+     "rel": "left_of",
+     "phrase": "to the left of",
+     "s": "a gate",
+     "o": "a pig",
+     "img": {
+      "x": "img/07f9fd0221.jpg",
+      "y": "img/07fb69da0d.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 8,
+   "id": 41139,
+   "subject": "coin",
+   "object": "pie",
+   "v": {
+    "o": {
+     "rel": "right_of",
+     "phrase": "to the right of",
+     "s": "a coin",
+     "o": "a pie",
+     "img": {
+      "x": "img/08o29eba2d.jpg",
+      "y": "img/08o61f46fd.jpg"
+     }
+    },
+    "f": {
+     "rel": "left_of",
+     "phrase": "to the left of",
+     "s": "a coin",
+     "o": "a pie",
+     "img": {
+      "x": "img/08fda2ab78.jpg",
+      "y": "img/08fe501717.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 9,
+   "id": 3669,
+   "subject": "tower",
+   "object": "blimp",
+   "v": {
+    "o": {
+     "rel": "left_of",
+     "phrase": "to the left of",
+     "s": "a tower",
+     "o": "a blimp",
+     "img": {
+      "x": "img/09o349d3f1.jpg",
+      "y": "img/09o11400de.jpg"
+     }
+    },
+    "f": {
+     "rel": "right_of",
+     "phrase": "to the right of",
+     "s": "a tower",
+     "o": "a blimp",
+     "img": {
+      "x": "img/09f8a89797.jpg",
+      "y": "img/09fa89a06b.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 10,
+   "id": 22493,
+   "subject": "lamp",
+   "object": "tv",
+   "v": {
+    "o": {
+     "rel": "right_of",
+     "phrase": "to the right of",
+     "s": "a lamp",
+     "o": "a TV",
+     "img": {
+      "x": "img/10ob8be9d7.jpg",
+      "y": "img/10o4712b6b.jpg"
+     }
+    },
+    "f": {
+     "rel": "left_of",
+     "phrase": "to the left of",
+     "s": "a lamp",
+     "o": "a TV",
+     "img": {
+      "x": "img/10f83145ed.jpg",
+      "y": "img/10f7b08df5.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 11,
+   "id": 36293,
+   "subject": "church",
+   "object": "flag",
+   "v": {
+    "o": {
+     "rel": "left_of",
+     "phrase": "to the left of",
+     "s": "a church",
+     "o": "a flag",
+     "img": {
+      "x": "img/11o611b96d.jpg",
+      "y": "img/11odac3f20.jpg"
+     }
+    },
+    "f": {
+     "rel": "right_of",
+     "phrase": "to the right of",
+     "s": "a church",
+     "o": "a flag",
+     "img": {
+      "x": "img/11f5de4e6b.jpg",
+      "y": "img/11fed1ecc9.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 12,
+   "id": 44067,
+   "subject": "bowl",
+   "object": "cup",
+   "v": {
+    "o": {
+     "rel": "left_of",
+     "phrase": "to the left of",
+     "s": "a bowl",
+     "o": "a cup",
+     "img": {
+      "x": "img/12oc2e1516.jpg",
+      "y": "img/12o914b954.jpg"
+     }
+    },
+    "f": {
+     "rel": "right_of",
+     "phrase": "to the right of",
+     "s": "a bowl",
+     "o": "a cup",
+     "img": {
+      "x": "img/12fa6dc7a2.jpg",
+      "y": "img/12f513eb86.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 13,
+   "id": 21457,
+   "subject": "keyboard",
+   "object": "monitor",
+   "v": {
+    "o": {
+     "rel": "below",
+     "phrase": "below",
+     "s": "a keyboard",
+     "o": "a monitor",
+     "img": {
+      "x": "img/13o4f83e2b.jpg",
+      "y": "img/13oe2c5964.jpg"
+     }
+    },
+    "f": {
+     "rel": "above",
+     "phrase": "above",
+     "s": "a keyboard",
+     "o": "a monitor",
+     "img": {
+      "x": "img/13f652e32e.jpg",
+      "y": "img/13fb7ff417.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 14,
+   "id": 18902,
+   "subject": "box",
+   "object": "apple",
+   "v": {
+    "o": {
+     "rel": "above",
+     "phrase": "above",
+     "s": "a box",
+     "o": "an apple",
+     "img": {
+      "x": "img/14o279c3a9.jpg",
+      "y": "img/14oec1c9b2.jpg"
+     }
+    },
+    "f": {
+     "rel": "below",
+     "phrase": "below",
+     "s": "a box",
+     "o": "an apple",
+     "img": {
+      "x": "img/14f9ae0733.jpg",
+      "y": "img/14f6c4da0c.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 15,
+   "id": 16096,
+   "subject": "fence",
+   "object": "door",
+   "v": {
+    "o": {
+     "rel": "below",
+     "phrase": "below",
+     "s": "a fence",
+     "o": "a door",
+     "img": {
+      "x": "img/15o068b53a.jpg",
+      "y": "img/15o14cc298.jpg"
+     }
+    },
+    "f": {
+     "rel": "above",
+     "phrase": "above",
+     "s": "a fence",
+     "o": "a door",
+     "img": {
+      "x": "img/15f6ea6b58.jpg",
+      "y": "img/15fe35cb4a.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 16,
+   "id": 39985,
+   "subject": "barrel",
+   "object": "pipe",
+   "v": {
+    "o": {
+     "rel": "below",
+     "phrase": "below",
+     "s": "a barrel",
+     "o": "a pipe",
+     "img": {
+      "x": "img/16odb91f0c.jpg",
+      "y": "img/16ob100e7b.jpg"
+     }
+    },
+    "f": {
+     "rel": "above",
+     "phrase": "above",
+     "s": "a barrel",
+     "o": "a pipe",
+     "img": {
+      "x": "img/16fdebbcbc.jpg",
+      "y": "img/16f2c31209.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 17,
+   "id": 46057,
+   "subject": "monitor",
+   "object": "keyboard",
+   "v": {
+    "o": {
+     "rel": "above",
+     "phrase": "above",
+     "s": "a monitor",
+     "o": "a keyboard",
+     "img": {
+      "x": "img/17o5de4b20.jpg",
+      "y": "img/17o30bce23.jpg"
+     }
+    },
+    "f": {
+     "rel": "below",
+     "phrase": "below",
+     "s": "a monitor",
+     "o": "a keyboard",
+     "img": {
+      "x": "img/17f80a1762.jpg",
+      "y": "img/17f8aa2ab7.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 18,
+   "id": 8386,
+   "subject": "tricycle",
+   "object": "pole",
+   "v": {
+    "o": {
+     "rel": "below",
+     "phrase": "below",
+     "s": "a tricycle",
+     "o": "a pole",
+     "img": {
+      "x": "img/18o939a58a.jpg",
+      "y": "img/18o1a91bd1.jpg"
+     }
+    },
+    "f": {
+     "rel": "above",
+     "phrase": "above",
+     "s": "a tricycle",
+     "o": "a pole",
+     "img": {
+      "x": "img/18fd8fcce9.jpg",
+      "y": "img/18f69481f8.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 19,
+   "id": 34036,
+   "subject": "bench",
+   "object": "fence",
+   "v": {
+    "o": {
+     "rel": "below",
+     "phrase": "below",
+     "s": "a bench",
+     "o": "a fence",
+     "img": {
+      "x": "img/19o2797b2e.jpg",
+      "y": "img/19oe97fab2.jpg"
+     }
+    },
+    "f": {
+     "rel": "above",
+     "phrase": "above",
+     "s": "a bench",
+     "o": "a fence",
+     "img": {
+      "x": "img/19ff3ed1ad.jpg",
+      "y": "img/19f030b940.jpg"
+     }
+    }
+   }
+  },
+  {
+   "n": 20,
+   "id": 42100,
+   "subject": "oil rig",
+   "object": "ocean",
+   "v": {
+    "o": {
+     "rel": "above",
+     "phrase": "above",
+     "s": "an oil rig",
+     "o": "the ocean",
+     "img": {
+      "x": "img/20oc9a8786.jpg",
+      "y": "img/20oec93609.jpg"
+     }
+    },
+    "f": {
+     "rel": "below",
+     "phrase": "below",
+     "s": "an oil rig",
+     "o": "the ocean",
+     "img": {
+      "x": "img/20fd174fad.jpg",
+      "y": "img/20fa7e5ee3.jpg"
+     }
+    }
+   }
+  }
+ ]
+}
