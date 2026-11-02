@@ -37,8 +37,8 @@ This conditions the study on both objects appearing. On these 20 prompts, the au
 
 Forked from [avivwei96/relation-drawing-study](https://github.com/avivwei96/relation-drawing-study).
 
-## v2/imagenet_4m: the v2 ImageNet study at 4M steps
+## v2/imagenet_4m: the v2 ImageNet prompts at 4M steps, one picture per round
 
 Live: https://idansc.github.io/relation-drawing-study/v2/imagenet_4m/ (preview without sending: `?dry=1`)
 
-Identical to `v2/imagenet/` (same 100 unfiltered test prompts, captions, noise, page, three questions and 30 random prompts per rater) except that the images come from the 4M-step checkpoints (EMA, guidance 4×4) instead of 1.3M. Answers go to their own ntfy topic with payload `v: 8` and study `imagenet-4m-pairs`, and the private collector stores them in `responses_imagenet_4m.jsonl`, apart from the other studies. The model key stays outside this repo until the study closes.
+Same images as `v2/imagenet/` (all 100 unfiltered test prompts, original and flipped caption, Self-Flow and SSF from the same noise) but from the 4M-step checkpoints (EMA, guidance 4×4). Each round shows one caption and **one** picture. Question 1: does the picture show the caption? (Yes / No; a missing object means No). Question 2: how good does the picture look? (1 very poor to 5 excellent). As in `v2/t2i/`, each rater gets 40 of the 100 prompts at random, 10 per model × original/flipped, and never both models' pictures of one prompt. Answers go to their own ntfy topic with payload `v: 9` and study `imagenet-4m-single`, stored privately in `responses_imagenet_4m.jsonl`. The model key stays outside this repo until the study closes.

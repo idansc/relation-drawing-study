@@ -3,12 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Which picture matches?</title>
-<meta name="description" content="A one-minute study: pick the picture that matches the caption.">
+<title>Does the picture match?</title>
+<meta name="description" content="A three-minute study: check one picture per caption and rate how good it looks.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖼️</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&display=swap">
+<!-- 4M ImageNet study, single-image version (study imagenet-4m-single). Same look as the 1.3M study page (idansc/relation-drawing-study);
+     each round shows ONE picture: question 1 asks whether it shows the caption (Yes / No), question 2 rates its quality 1-5. -->
 <style>
 [hidden]{display:none!important}
 :root{
@@ -23,7 +25,7 @@
 }
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);-webkit-tap-highlight-color:transparent}
-.app{max-width:860px;margin:0 auto;padding:14px 16px 40px;display:flex;flex-direction:column;gap:14px;min-height:100vh}
+.app{max-width:640px;margin:0 auto;padding:14px 16px 40px;display:flex;flex-direction:column;gap:14px;min-height:100vh}
 .top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .brand{font-weight:900;font-size:17px;letter-spacing:.2px}
 .brand span{color:var(--accent)}
@@ -36,25 +38,16 @@ html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font)
 h1{font-size:clamp(26px,5vw,36px);line-height:1.12;margin:0 0 8px;font-weight:900;letter-spacing:-.3px}
 .lead{font-size:17px;color:var(--ink2);margin:0 0 16px;line-height:1.45}
 .qlabel{font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);text-align:center}
-.caption{font-size:clamp(26px,5.6vw,42px);font-weight:800;line-height:1.2;text-align:center;margin:6px 0 16px;letter-spacing:-.3px;text-wrap:balance}
+.caption{font-size:clamp(24px,5.4vw,38px);font-weight:800;line-height:1.2;text-align:center;margin:6px 0 14px;letter-spacing:-.3px;text-wrap:balance}
 .caption b{font-weight:900}
 .rel{display:inline-block;background:var(--rel);color:var(--rel-ink);padding:0 .32em;border-radius:.3em;transform:rotate(-1.5deg);white-space:nowrap;box-shadow:0 3px 0 rgba(0,0,0,.12)}
-.pics{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.pic{position:relative;border:0;padding:0;border-radius:18px;background:#000;cursor:pointer;overflow:hidden;aspect-ratio:1;
-     outline:4px solid transparent;outline-offset:3px;transition:transform .15s,outline-color .15s,box-shadow .15s}
-.pic img{width:100%;height:100%;object-fit:cover;display:block;image-rendering:auto}
-.pic .tag{position:absolute;left:10px;top:10px;background:rgba(255,255,255,.92);color:#111;font-weight:900;font-size:17px;
-          width:34px;height:34px;border-radius:50%;display:grid;place-items:center;box-shadow:0 2px 6px rgba(0,0,0,.25)}
-.pic .check{position:absolute;inset:0;display:grid;place-items:center;font-size:84px;color:#fff;opacity:0;background:rgba(91,76,240,.28);transition:opacity .15s}
-@media (hover:hover){.pic:hover{transform:translateY(-3px);outline-color:var(--accent2);box-shadow:var(--shadow)}}
-.pic:focus-visible{outline-color:var(--accent)}
-.pic.sel{outline-color:var(--accent)}
-.pic.sel .check{opacity:1}
-.alts{display:flex;gap:12px;justify-content:center;margin-top:16px;flex-wrap:wrap}
-.alt{font:inherit;font-weight:800;font-size:17px;padding:12px 26px;border-radius:999px;border:2px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;min-width:140px;transition:transform .1s,border-color .15s,background .15s}
+.one{width:100%;max-width:440px;margin:0 auto;border-radius:18px;background:#000;overflow:hidden;aspect-ratio:1}
+.one img{width:100%;height:100%;object-fit:cover;display:block}
+.yn{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:440px;margin:14px auto 0}
+.alt{font:inherit;font-weight:800;font-size:18px;padding:12px 10px;border-radius:999px;border:2px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;min-width:0;transition:transform .1s,border-color .15s,background .15s}
 .alt:hover{border-color:var(--accent)}
 .alt.sel{background:var(--accent);border-color:var(--accent);color:#fff}
-.alt:active,.pic:active{transform:scale(.97)}
+.alt:active{transform:scale(.97)}
 .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:10px;flex-wrap:wrap}
 .link{font:inherit;font-weight:800;color:var(--ink2);background:none;border:0;cursor:pointer;padding:6px 2px}
 .link:disabled{opacity:.3;cursor:default}
@@ -66,7 +59,7 @@ h1{font-size:clamp(26px,5vw,36px);line-height:1.12;margin:0 0 8px;font-weight:90
 .btn.ghost{background:transparent;color:var(--accent);box-shadow:none;border:2px solid var(--accent);font-size:16px;padding:10px 20px}
 .practice{border:2px dashed var(--line);border-radius:18px;padding:14px;margin:4px 0 16px}
 .practice .caption{font-size:clamp(22px,4.6vw,30px);margin:4px 0 12px}
-.emo{font-size:clamp(40px,11vw,72px);background:var(--accent2);display:flex;align-items:center;justify-content:center;gap:.25em;aspect-ratio:auto;padding:18px 0;border-radius:16px}
+.emo{font-size:clamp(40px,11vw,72px);background:var(--accent2);display:flex;align-items:center;justify-content:center;gap:.25em;padding:18px 0;border-radius:16px;max-width:440px;margin:0 auto}
 .emo span{display:inline-block}
 .shake{animation:shake .35s}
 @keyframes shake{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
@@ -87,79 +80,67 @@ textarea{width:100%;font:12px/1.4 ui-monospace,Menlo,monospace;margin-top:8px;bo
 @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
 .small{font-size:13px;color:var(--ink2);margin-top:14px;line-height:1.5}
-@media (max-width:520px){.card{padding:16px;border-radius:18px}.pics{gap:9px}.alt{min-width:0;flex:1;padding:12px 10px}.pic .tag{width:28px;height:28px;font-size:14px}}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-
 .step{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;font-weight:900;margin-right:8px;vertical-align:2px;letter-spacing:0}
 .q2{margin-top:18px;padding:14px;border-radius:16px;border:2px solid var(--line);transition:border-color .2s,background .2s,opacity .2s;opacity:.55}
 .q2.on{opacity:1;border-color:var(--accent);background:var(--accent2)}
 .q2 .qt{font-weight:900;font-size:clamp(18px,3.6vw,22px);text-align:center}
 .q2 .qt small{display:block;font-weight:700;font-size:13px;color:var(--ink2);margin-top:2px}
-.seg{display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:10px;margin-top:10px}
-.seg .alt{min-width:0;padding:11px 8px}
-.seg4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}
-.seg4 .alt{min-width:0;padding:11px 6px}
+.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:10px}
+.rt{font:inherit;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:7px 2px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px;min-width:0;transition:transform .1s,border-color .15s,background .15s}
+.rt b{font-size:19px;font-weight:900;line-height:1.1}
+.rt i{font-style:normal;font-size:11.5px;font-weight:700;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.rt:hover{border-color:var(--accent)}
+.rt.sel{background:var(--accent);border-color:var(--accent);color:#fff}
+.rt.sel i{color:#fff}
+.rt:active{transform:scale(.96)}
+@media (max-width:520px){.card{padding:16px;border-radius:18px}.scale{gap:4px}.rt i{font-size:10px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 <main class="app">
   <header class="top">
-    <div class="brand">Which picture <span>matches?</span></div>
+    <div class="brand">Does the picture <span>match?</span></div>
     <div class="dots" id="dots" aria-hidden="true"></div>
   </header>
 
   <section class="card fade" id="intro">
-    <h1>Which picture matches the caption?</h1>
-    <p class="lead"><b id="nRounds">30</b> quick rounds, about five minutes. For each caption, <b>1</b>&nbsp;tap the picture where the objects are placed as the caption says, <b>2</b>&nbsp;say which pictures show both objects at all, and <b>3</b>&nbsp;pick the picture that looks better.</p>
+    <h1>Does the picture match the caption?</h1>
+    <p class="lead"><b id="nRounds">40</b> quick rounds, about five minutes. Each round shows one caption and one picture. <b>1</b>&nbsp;Say whether the objects are placed as the caption says, and <b>2</b>&nbsp;rate how good the picture looks, from 1 (very poor) to 5 (excellent).</p>
     <div class="practice">
-      <div class="qlabel">Warm-up</div>
+      <div class="qlabel">Warm-up: does this picture show</div>
       <div class="caption">a <b>cat</b> <span class="rel">to the left of</span> a <b>dog</b></div>
-      <div class="pics" id="prac"></div>
-      <p class="msg" id="pracMsg">Tap the matching picture.</p>
+      <div class="emo" id="pracPic"></div>
+      <div class="yn"><button class="alt" id="pracY">Yes</button><button class="alt" id="pracN">No</button></div>
+      <p class="msg" id="pracMsg">Does the picture match the caption?</p>
     </div>
     <ul class="rules">
-      <li>For question 1, only <b>where</b> things are matters, not how nice the picture looks.</li>
-      <li>If both pictures match, tap <b>Both</b>. If none does, tap <b>Neither</b>. A picture that is missing one of the objects does not match.</li>
+      <li>For question 1, only <b>where</b> things are matters, not how nice the picture looks. If an object is missing, the picture does not show the caption.</li>
+      <li>For question 2, rate how good the picture looks, not where things are.</li>
       <li><b>The models are still in the middle of training</b>, so pictures are not perfect yet, e.g., odd faces or blurry objects. Just do your best to judge them.</li>
     </ul>
     <div class="row">
       <input type="text" id="name" maxlength="40" placeholder="Name or initials (optional)" autocomplete="nickname" aria-label="Name or initials (optional)">
       <button class="btn" id="start" disabled>Start</button>
     </div>
-    <p class="small">The pictures were drawn by two AI image models from the same random seed. Which model drew which picture is hidden and changes every round.</p>
+    <p class="small">The pictures were drawn by two AI image models. Which model drew each picture is hidden.</p>
   </section>
 
   <section class="card" id="trial" hidden>
-    <div class="qlabel"><span class="step">1</span>Which picture shows</div>
+    <div class="qlabel"><span class="step">1</span>Does this picture show</div>
     <div class="caption" id="cap"></div>
-    <div class="pics">
-      <button class="pic" id="pA" aria-label="Picture A"><img id="iA" alt=""><span class="tag">A</span><span class="check">✓</span></button>
-      <button class="pic" id="pB" aria-label="Picture B"><img id="iB" alt=""><span class="tag">B</span><span class="check">✓</span></button>
-    </div>
-    <div class="alts">
-      <button class="alt" id="bBoth">Both</button>
-      <button class="alt" id="bNone">Neither</button>
-    </div>
-    <div class="q2" id="qp">
-      <div class="qt"><span class="step">2</span>Which pictures show both objects?<small id="pObj"></small></div>
-      <div class="seg4">
-        <button class="alt" id="oA">A</button>
-        <button class="alt" id="oB">B</button>
-        <button class="alt" id="oBoth">Both</button>
-        <button class="alt" id="oNone">Neither</button>
-      </div>
+    <div class="one"><img id="img" alt=""></div>
+    <div class="yn">
+      <button class="alt" id="bY">Yes</button>
+      <button class="alt" id="bN">No</button>
     </div>
     <div class="q2" id="q2">
-      <div class="qt"><span class="step">3</span>Which looks better?<small>Both models are still mid-training, so neither picture is perfect. A caption may ask for an odd layout, so do not count the layout itself.</small></div>
-      <div class="seg">
-        <button class="alt" id="qA">A</button>
-        <button class="alt" id="qS">About the same</button>
-        <button class="alt" id="qB">B</button>
-      </div>
+      <div class="qt"><span class="step">2</span>How good does the picture look?<small>From 1 (very poor) to 5 (excellent). A caption may ask for an odd layout, so do not count the layout itself.</small></div>
+      <div class="scale"><button class="rt" data-v="1" aria-label="1, Very poor"><b>1</b><i>Very poor</i></button><button class="rt" data-v="2" aria-label="2, Poor"><b>2</b><i>Poor</i></button><button class="rt" data-v="3" aria-label="3, Fair"><b>3</b><i>Fair</i></button><button class="rt" data-v="4" aria-label="4, Good"><b>4</b><i>Good</i></button><button class="rt" data-v="5" aria-label="5, Excellent"><b>5</b><i>Excellent</i></button></div>
     </div>
     <div class="foot">
       <button class="link" id="back">← Back</button>
-      <span class="keys" id="keys">Keys: ← A · → B · ↑ Both · ↓ Neither</span>
+      <span class="keys" id="keys">Keys: Y yes · N no</span>
       <button class="link" id="stop" hidden>Finish now ✓</button>
     </div>
   </section>
@@ -181,30 +162,30 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
 
 <script>
 (() => {
-  const INBOX = 'https://ntfy.sh/ssf-heval4mp-ccae078ea1e91c9d';
-  const KEY = 'rds-imagenet-4m-pairs';
+  const INBOX = 'https://ntfy.sh/ssf-heval4ms-2d22456a1b69ba95';
+  const STUDY = 'imagenet-4m-single';
+  const KEY = 'rds-' + STUDY, ROUNDS = 40;
   // ?dry=1 previews the study without sending answers; local copies (localhost) never send
   const DRY = new URLSearchParams(location.search).has('dry') || /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
   const $ = id => document.getElementById(id);
-  const ROUNDS = 30;
   let T = null, P = [], A = {}, pos = 0, st = null, shownAt = 0, busy = false, sentN = 0;
 
   // seeded RNG so a participant keeps the same assignment after a reload
   const rng = s => () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296;
   const shuffle = (a, r) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
-  const half = (n, a, b, r) => shuffle(Array.from({length: n}, (_, i) => i < n / 2 ? a : b), r);
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify({st, A, pos, sentN})); } catch (e) {} };
   const load = () => { try { return JSON.parse(localStorage.getItem(KEY)); } catch (e) { return null; } };
   const toast = t => { const el = $('toast'); el.textContent = t; el.classList.add('show'); clearTimeout(toast.h); toast.h = setTimeout(() => el.classList.remove('show'), 1300); };
   const fact = n => T.facts.find(x => x.n === n);
-  const full = i => A[i] && A[i].c && A[i].p && A[i].q;
+  const full = i => A[i] && A[i].c && A[i].r;
   const nDone = () => P.filter((_, i) => full(i)).length;
 
+  // as in the v2 single-picture study (v2/t2i): ROUNDS different prompts per rater, each (model, original/flipped)
+  // combination equally often; a rater never sees both models' pictures of the same prompt
   function plan(seed) {
-    // every prompt once, half with the original relation and half flipped; each model on the left in half of the rounds
     const r = rng(seed), n = Math.min(ROUNDS, T.facts.length), pick = shuffle(T.facts, r).slice(0, n);
-    const vars = half(n, 'o', 'f', r), lefts = half(n, 'x', 'y', r);
-    return pick.map((f, i) => ({n: f.n, id: f.id, v: vars[i], left: lefts[i]}));
+    const combos = shuffle(Array.from({length: n}, (_, i) => [['x', 'o'], ['x', 'f'], ['y', 'o'], ['y', 'f']][i % 4]), r);
+    return pick.map((f, i) => ({n: f.n, id: f.id, m: combos[i][0], v: combos[i][1]}));
   }
   function dots() {
     const on = !$('trial').hidden;
@@ -212,28 +193,25 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
   }
   const np = s => s.replace(/^(an?\s)(.*)$/, '$1<b>$2</b>');   // "a trench coat" -> a <b>trench coat</b>
   const captionHTML = v => `${np(v.s)} <span class="rel">${v.phrase}</span> ${np(v.o)}`;
-  const B1 = {A: 'pA', B: 'pB', both: 'bBoth', neither: 'bNone'}, BP = {A: 'oA', B: 'oB', both: 'oBoth', neither: 'oNone'}, B2 = {A: 'qA', B: 'qB', same: 'qS'};
 
   function paint() {
     const a = A[pos] || {};
-    [B1, BP, B2].forEach(m => Object.values(m).forEach(id => $(id).classList.remove('sel')));
-    if (a.c) $(B1[a.c]).classList.add('sel'); if (a.p) $(BP[a.p]).classList.add('sel'); if (a.q) $(B2[a.q]).classList.add('sel');
-    $('qp').classList.toggle('on', !!a.c); $('q2').classList.toggle('on', !!(a.c && a.p));
-    $('keys').textContent = !a.c ? 'Keys: ← A · → B · ↑ Both · ↓ Neither' : !a.p ? 'Objects: ← A · → B · ↑ Both · ↓ Neither' : 'Keys: ← A better · → B better · ↓ About the same';
+    $('bY').classList.toggle('sel', a.c === 'yes'); $('bN').classList.toggle('sel', a.c === 'no');
+    document.querySelectorAll('#q2 .rt').forEach(b => b.classList.toggle('sel', +b.dataset.v === a.r));
+    $('q2').classList.toggle('on', !!a.c);
+    $('keys').textContent = a.c ? 'Keys: 1–5 rate the picture' : 'Keys: Y yes · N no';
   }
   function show(i) {
-    pos = i; const t = P[i], v = fact(t.n).v[t.v], right = t.left === 'x' ? 'y' : 'x';
-    $('cap').innerHTML = captionHTML(v);
-    $('pObj').innerHTML = `Is there ${np(v.s)} and ${np(v.o)} in the picture, wherever they are?`;
-    $('iA').src = v.img[t.left]; $('iB').src = v.img[right];
-    const nx = P[i + 1]; if (nx) Object.values(fact(nx.n).v[nx.v].img).forEach(src => { const im = new Image(); im.src = src; });
+    pos = i; const t = P[i], v = fact(t.n).v[t.v];
+    $('cap').innerHTML = captionHTML(v); $('img').src = v.img[t.m];
+    const nx = P[i + 1]; if (nx) { const im = new Image(); im.src = fact(nx.n).v[nx.v].img[nx.m]; }
     paint(); $('back').disabled = i === 0; $('stop').hidden = nDone() === 0;
     $('trial').classList.remove('fade'); void $('trial').offsetWidth; $('trial').classList.add('fade');
     shownAt = performance.now(); busy = false; dots(); save();
   }
   function payload(final) {
-    const rows = P.map((t, i) => A[i] && (A[i].c || A[i].p || A[i].q) ? {n: t.n, id: t.id, v: t.v, left: t.left, c: A[i].c || null, p: A[i].p || null, q: A[i].q || null, ms: A[i].ms, msp: A[i].msp, msq: A[i].msq} : null).filter(Boolean);
-    return JSON.stringify({v: 8, study: 'imagenet-4m-pairs', pid: st.pid, name: st.name, seed: st.seed, t0: st.t0, dur: Math.round(Date.now() - st.t0ms),
+    const rows = P.map((t, i) => A[i] && (A[i].c || A[i].r) ? {n: t.n, id: t.id, v: t.v, m: t.m, c: A[i].c || null, r: A[i].r || null, ms: A[i].ms, msr: A[i].msr} : null).filter(Boolean);
+    return JSON.stringify({v: 9, study: STUDY, pid: st.pid, name: st.name, seed: st.seed, t0: st.t0, dur: Math.round(Date.now() - st.t0ms),
       ua: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? 'm' : 'd', practice: st.practice, final, early: nDone() < P.length, trials: rows});
   }
   function send(final) {
@@ -248,9 +226,7 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
   function answer(kind, val) {
     if (busy || $('trial').hidden) return;
     const a = A[pos] = A[pos] || {}, now = Math.round(performance.now() - shownAt);
-    if (kind === 'c') { a.c = val; a.ms = now; }
-    else if (kind === 'p') { if (!a.c) { toast('First: which picture shows the caption? ☝️'); return; } a.p = val; a.msp = now; }
-    else { if (!a.c || !a.p) { toast(!a.c ? 'First: which picture shows the caption? ☝️' : 'Next: which pictures show both objects? ☝️'); return; } a.q = val; a.msq = now; }
+    if (kind === 'c') { a.c = val; a.ms = now; } else { if (!a.c) { toast('First: does the picture show the caption? ☝️'); return; } a.r = val; a.msr = now; }
     paint(); dots(); save();
     if (!full(pos)) return;
     busy = true;
@@ -265,8 +241,8 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
     const k = nDone(), early = k < P.length; st.ended = true; save();
     $('trial').hidden = true; $('done').hidden = false; $('more').hidden = !early; dots();
     const s = Math.round((Date.now() - st.t0ms) / 1000), dur = `${s >= 60 ? Math.floor(s / 60) + ' min ' : ''}${s % 60} s`;
-    $('stats').textContent = early ? `You judged ${k} of ${P.length} pairs in ${dur}. Every answer helps, thank you! Want to do a few more? Tap Keep going.`
-                                   : `You judged ${P.length} pairs in ${dur}. Your answers help us check how well AI models follow words like “left of” and “above”.`;
+    $('stats').textContent = early ? `You judged ${k} of ${P.length} pictures in ${dur}. Every answer helps, thank you! Want to do a few more? Tap Keep going.`
+                                   : `You judged ${P.length} pictures in ${dur}. Your answers help us check how well AI models follow words like “left of” and “above”.`;
     $('code').value = payload(true);
     const msg = ok => DRY ? 'Preview mode (?dry=1): answers were not sent.' : ok ? 'Answers received. Nothing else to do. ✔' : 'Sending failed. Please copy the backup code below and send it to the person who shared this link.';
     if (k > (st.finalN || 0)) { $('sendMsg').textContent = 'Sending your answers…'; send(true).then(ok => { if (ok) { st.finalN = k; save(); } $('sendMsg').textContent = msg(ok); }); }
@@ -274,15 +250,19 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
     confetti();
   }
 
-  // warm-up with emoji, in random order; the task starts only after a correct pick
+  // warm-up with emoji: one picture, matching or not at random; the task starts only after a correct answer
   function practice() {
-    const tiles = [['🐱', '🐶', 1], ['🐶', '🐱', 0]]; if (Math.random() < .5) tiles.reverse();
-    $('prac').innerHTML = tiles.map(([a, b, ok]) => `<button class="pic emo" data-ok="${ok}" aria-label="${a === '🐱' ? 'cat then dog' : 'dog then cat'}"><span>${a}</span><span>${b}</span></button>`).join('');
-    $('prac').querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+    const ok = Math.random() < .5;
+    $('pracPic').innerHTML = ok ? '<span>🐱</span><span>🐶</span>' : '<span>🐶</span><span>🐱</span>';
+    $('pracPic').setAttribute('aria-label', ok ? 'cat then dog' : 'dog then cat'); $('pracPic').dataset.ok = ok ? '1' : '0';
+    const pick = yes => {
       st.practice = (st.practice || 0) + 1;
-      if (b.dataset.ok === '1') { b.classList.add('sel'); $('pracMsg').textContent = 'Nice, that’s it! 🎯 Ready when you are.'; $('pracMsg').className = 'msg good'; $('start').disabled = false; }
-      else { b.classList.remove('shake'); void b.offsetWidth; b.classList.add('shake'); $('pracMsg').textContent = 'Look again: the cat should be on the left.'; $('pracMsg').className = 'msg badm'; }
-      save(); }));
+      $('pracY').classList.toggle('sel', yes); $('pracN').classList.toggle('sel', !yes);
+      if (yes === ok) { $('pracMsg').textContent = 'Nice, that’s it! 🎯 Ready when you are.'; $('pracMsg').className = 'msg good'; $('start').disabled = false; }
+      else { const b = $('pracPic'); b.classList.remove('shake'); void b.offsetWidth; b.classList.add('shake');
+             $('pracMsg').textContent = 'Look again: is the cat on the left?'; $('pracMsg').className = 'msg badm'; }
+      save(); };
+    $('pracY').addEventListener('click', () => pick(true)); $('pracN').addEventListener('click', () => pick(false));
   }
 
   function confetti() {
@@ -296,11 +276,8 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
       if (++t < 170) requestAnimationFrame(frame); else g.clearRect(0, 0, c.width, c.height); })();
   }
 
-  $('pA').addEventListener('click', () => answer('c', 'A')); $('pB').addEventListener('click', () => answer('c', 'B'));
-  $('bBoth').addEventListener('click', () => answer('c', 'both')); $('bNone').addEventListener('click', () => answer('c', 'neither'));
-  $('oA').addEventListener('click', () => answer('p', 'A')); $('oB').addEventListener('click', () => answer('p', 'B'));
-  $('oBoth').addEventListener('click', () => answer('p', 'both')); $('oNone').addEventListener('click', () => answer('p', 'neither'));
-  $('qA').addEventListener('click', () => answer('q', 'A')); $('qB').addEventListener('click', () => answer('q', 'B')); $('qS').addEventListener('click', () => answer('q', 'same'));
+  $('bY').addEventListener('click', () => answer('c', 'yes')); $('bN').addEventListener('click', () => answer('c', 'no'));
+  document.querySelectorAll('#q2 .rt').forEach(b => b.addEventListener('click', () => answer('r', +b.dataset.v)));
   $('back').addEventListener('click', () => { if (pos > 0) show(pos - 1); });
   $('stop').addEventListener('click', () => { if (nDone() && confirm(`Finish now? Your ${nDone()} answers so far will be sent.`)) finish(); });
   $('more').addEventListener('click', () => { st.ended = false; save(); $('done').hidden = true; $('trial').hidden = false; const f = P.findIndex((_, i) => !full(i)); show(f < 0 ? 0 : f); });
@@ -308,9 +285,10 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
     (navigator.clipboard ? navigator.clipboard.writeText(u) : Promise.reject()).then(() => toast('Link copied 🔗'), () => toast(u)); });
   document.addEventListener('keydown', e => {
     if ($('trial').hidden || e.target.tagName === 'INPUT') return;
-    const a = A[pos] || {}, kind = !a.c ? 'c' : !a.p ? 'p' : 'q';
-    const m = kind !== 'q' ? {ArrowLeft: 'A', ArrowRight: 'B', ArrowUp: 'both', ArrowDown: 'neither'}[e.key] : {ArrowLeft: 'A', ArrowRight: 'B', ArrowDown: 'same', ArrowUp: 'same'}[e.key];
-    if (m) { e.preventDefault(); answer(kind, m); } else if (e.key === 'Backspace' && pos > 0) { e.preventDefault(); show(pos - 1); }
+    const first = !(A[pos] && A[pos].c), k = e.key.toLowerCase();
+    if (first && (k === 'y' || k === 'n')) { e.preventDefault(); answer('c', k === 'y' ? 'yes' : 'no'); }
+    else if (!first && /^[1-5]$/.test(k)) { e.preventDefault(); answer('r', +k); }
+    else if (e.key === 'Backspace' && pos > 0) { e.preventDefault(); show(pos - 1); }
   });
 
   async function init() {
@@ -322,7 +300,7 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
     else { const b = new Uint32Array(2); crypto.getRandomValues(b);
       st = {seed: b[0] >>> 0, pid: b[1].toString(36), name: '', practice: 0, t0: new Date().toISOString(), t0ms: Date.now()}; }
     P = plan(st.seed); dots();
-    P.slice(0, 6).forEach(t => Object.values(fact(t.n).v[t.v].img).forEach(src => { const im = new Image(); im.src = src; }));
+    P.slice(0, 6).forEach(t => { const im = new Image(); im.src = fact(t.n).v[t.v].img[t.m]; });
     // personal links: ?p=AW fills in the rater's initials, so they do not need to type them
     const qp = (new URLSearchParams(location.search).get('p') || '').replace(/[^\p{L}\p{N} ._-]/gu, '').slice(0, 40);
     if (qp) { st.name = qp; $('name').hidden = true; }
