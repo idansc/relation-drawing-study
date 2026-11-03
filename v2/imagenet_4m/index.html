@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&display=swap">
-<!-- 4M ImageNet study, single-image version (study imagenet-4m-single-v2). Same look as the 1.3M study page (idansc/relation-drawing-study);
+<!-- 4M ImageNet study, single-image version (study imagenet-4m-single-v3). Same look as the 1.3M study page (idansc/relation-drawing-study);
      each round shows ONE picture: question 1 asks whether it shows the caption (Yes / No), question 2 rates its quality 1-5. -->
 <style>
 [hidden]{display:none!important}
@@ -163,7 +163,7 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
 <script>
 (() => {
   const INBOX = 'https://ntfy.sh/ssf-heval4ms-2d22456a1b69ba95';
-  const STUDY = 'imagenet-4m-single-v2';
+  const STUDY = 'imagenet-4m-single-v3';
   const KEY = 'rds-' + STUDY, ROUNDS = 40;
   // ?dry=1 previews the study without sending answers; local copies (localhost) never send
   const DRY = new URLSearchParams(location.search).has('dry') || /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
@@ -184,14 +184,15 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
   // combination equally often; a rater never sees both models' pictures of the same prompt
   function plan(seed) {
     const r = rng(seed), n = Math.min(ROUNDS, T.facts.length), pick = shuffle(T.facts, r).slice(0, n);
-    const combos = shuffle(Array.from({length: n}, (_, i) => [['x', 'o'], ['x', 'f'], ['y', 'o'], ['y', 'f']][i % 4]), r);
+    const MC = Object.keys(T.facts[0].v.o.img).sort();   // the two (opaque) model codes
+    const combos = shuffle(Array.from({length: n}, (_, i) => [[MC[0], 'o'], [MC[0], 'f'], [MC[1], 'o'], [MC[1], 'f']][i % 4]), r);
     return pick.map((f, i) => ({n: f.n, id: f.id, m: combos[i][0], v: combos[i][1]}));
   }
   function dots() {
     const on = !$('trial').hidden;
     $('dots').innerHTML = P.map((t, i) => `<i class="dot${full(i) ? ' on' : ''}${on && i === pos ? ' cur' : ''}"></i>`).join('');
   }
-  const np = s => s.replace(/^(an?\s)(.*)$/, '$1<b>$2</b>');   // "a trench coat" -> a <b>trench coat</b>
+  const np = s => /^(an?|the)\s/.test(s) ? s.replace(/^((?:an?|the)\s)(.*)$/, '$1<b>$2</b>') : `<b>${s}</b>`;   // a <b>trench coat</b>, <b>broccoli</b>
   const captionHTML = v => `${np(v.s)} <span class="rel">${v.phrase}</span> ${np(v.o)}`;
 
   function paint() {
@@ -211,7 +212,7 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
   }
   function payload(final) {
     const rows = P.map((t, i) => A[i] && (A[i].c || A[i].r) ? {n: t.n, id: t.id, v: t.v, m: t.m, c: A[i].c || null, r: A[i].r || null, ms: A[i].ms, msr: A[i].msr} : null).filter(Boolean);
-    return JSON.stringify({v: 10, study: STUDY, pid: st.pid, name: st.name, seed: st.seed, t0: st.t0, dur: Math.round(Date.now() - st.t0ms),
+    return JSON.stringify({v: 11, study: STUDY, pid: st.pid, name: st.name, seed: st.seed, t0: st.t0, dur: Math.round(Date.now() - st.t0ms),
       ua: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? 'm' : 'd', practice: st.practice, final, early: nDone() < P.length, trials: rows});
   }
   function send(final) {
