@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Does the picture match?</title>
-<meta name="description" content="A three-minute study: check one picture per caption and rate how good it looks.">
+<meta name="description" content="A seven-minute study: check one picture per caption and rate how good it looks.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖼️</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -106,7 +106,7 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
 
   <section class="card fade" id="intro">
     <h1>Does the picture match the caption?</h1>
-    <p class="lead"><b id="nRounds">40</b> quick rounds, about five minutes. Each round shows one caption and one picture. <b>1</b>&nbsp;Say whether the objects are placed as the caption says, and <b>2</b>&nbsp;rate how good the picture looks, from 1 (very poor) to 5 (excellent).</p>
+    <p class="lead"><b id="nRounds">56</b> quick rounds, about seven minutes. Each round shows one caption and one picture. <b>1</b>&nbsp;Say whether the picture shows the caption, and <b>2</b>&nbsp;rate how good the picture looks, from 1 (very poor) to 5 (excellent).</p>
     <div class="practice">
       <div class="qlabel">Warm-up: does this picture show</div>
       <div class="caption">a <b>cat</b> <span class="rel">to the left of</span> a <b>dog</b></div>
@@ -115,7 +115,8 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
       <p class="msg" id="pracMsg">Does the picture match the caption?</p>
     </div>
     <ul class="rules">
-      <li>For question 1, only <b>where</b> things are matters, not how nice the picture looks. If an object is missing, the picture does not show the caption.</li>
+      <li>Most captions name two objects and where they are (“a cat to the left of a dog”). Then only <b>where</b> things are matters, not how nice the picture looks. If an object is missing, the picture does not show the caption.</li>
+      <li>Some captions name just one thing (“a violin”). Then only whether that thing is in the picture matters.</li>
       <li>For question 2, rate how good the picture looks, not where things are.</li>
       <li><b>The models are still in the middle of training</b>, so pictures are not perfect yet, e.g., odd faces or blurry objects. Just do your best to judge them.</li>
     </ul>
@@ -163,8 +164,8 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
 <script>
 (() => {
   const INBOX = 'https://ntfy.sh/ssf-heval4ms-2d22456a1b69ba95';
-  const STUDY = 'imagenet-4m-single-v3';
-  const KEY = 'rds-' + STUDY, ROUNDS = 40;
+  const STUDY = 'imagenet-4m-single-v4';
+  const KEY = 'rds-' + STUDY, ROUNDS = 40, CROUNDS = 16;
   // ?dry=1 previews the study without sending answers; local copies (localhost) never send
   const DRY = new URLSearchParams(location.search).has('dry') || /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
   const $ = id => document.getElementById(id);
@@ -186,7 +187,12 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
     const r = rng(seed), n = Math.min(ROUNDS, T.facts.length), pick = shuffle(T.facts, r).slice(0, n);
     const MC = Object.keys(T.facts[0].v.o.img).sort();   // the two (opaque) model codes
     const combos = shuffle(Array.from({length: n}, (_, i) => [[MC[0], 'o'], [MC[0], 'f'], [MC[1], 'o'], [MC[1], 'f']][i % 4]), r);
-    return pick.map((f, i) => ({n: f.n, id: f.id, m: combos[i][0], v: combos[i][1]}));
+    // class rounds ("Does this picture show a violin?") on CROUNDS other prompts: each (model, c = class-only picture /
+    // q = relation picture) combination equally often; all rounds mixed in random order
+    const rest = shuffle(T.facts.filter(f => !pick.includes(f)), r).slice(0, CROUNDS);
+    const cc = shuffle(Array.from({length: rest.length}, (_, i) => [[MC[0], 'c'], [MC[0], 'q'], [MC[1], 'c'], [MC[1], 'q']][i % 4]), r);
+    return shuffle(pick.map((f, i) => ({n: f.n, id: f.id, m: combos[i][0], v: combos[i][1]}))
+      .concat(rest.map((f, i) => ({n: f.n, id: f.id, m: cc[i][0], v: cc[i][1]}))), r);
   }
   function dots() {
     const on = !$('trial').hidden;
@@ -204,7 +210,7 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
   }
   function show(i) {
     pos = i; const t = P[i], v = fact(t.n).v[t.v];
-    $('cap').innerHTML = captionHTML(v); $('img').src = v.img[t.m];
+    $('cap').innerHTML = v.cls ? np(v.cls) : captionHTML(v); $('img').src = v.img[t.m];
     const nx = P[i + 1]; if (nx) { const im = new Image(); im.src = fact(nx.n).v[nx.v].img[nx.m]; }
     paint(); $('back').disabled = i === 0; $('stop').hidden = nDone() === 0;
     $('trial').classList.remove('fade'); void $('trial').offsetWidth; $('trial').classList.add('fade');
@@ -212,7 +218,7 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
   }
   function payload(final) {
     const rows = P.map((t, i) => A[i] && (A[i].c || A[i].r) ? {n: t.n, id: t.id, v: t.v, m: t.m, c: A[i].c || null, r: A[i].r || null, ms: A[i].ms, msr: A[i].msr} : null).filter(Boolean);
-    return JSON.stringify({v: 11, study: STUDY, pid: st.pid, name: st.name, seed: st.seed, t0: st.t0, dur: Math.round(Date.now() - st.t0ms),
+    return JSON.stringify({v: 12, study: STUDY, pid: st.pid, name: st.name, seed: st.seed, t0: st.t0, dur: Math.round(Date.now() - st.t0ms),
       ua: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? 'm' : 'd', practice: st.practice, final, early: nDone() < P.length, trials: rows});
   }
   function send(final) {
@@ -295,7 +301,7 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
   async function init() {
     try { T = await (await fetch('trials.json', {cache: 'no-cache'})).json(); }
     catch (e) { $('pracMsg').textContent = 'The study failed to load. Please reload the page.'; return; }
-    $('nRounds').textContent = Math.min(ROUNDS, T.facts.length);
+    $('nRounds').textContent = Math.min(ROUNDS + CROUNDS, T.facts.length);
     const saved = load();
     if (saved && saved.st && saved.st.seed) { ({st, A, pos} = saved); sentN = saved.sentN || 0; }
     else { const b = new Uint32Array(2); crypto.getRandomValues(b);
