@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Does the picture match?</title>
-<meta name="description" content="A seven-minute study: check one picture per caption and rate how good it looks.">
+<meta name="description" content="A five-minute study: check one picture per caption and rate how good it looks.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖼️</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -106,7 +106,7 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
 
   <section class="card fade" id="intro">
     <h1>Does the picture match the caption?</h1>
-    <p class="lead"><b id="nRounds">56</b> quick rounds, about seven minutes. Each round shows one caption and one picture. <b>1</b>&nbsp;Say whether the picture shows the caption, and <b>2</b>&nbsp;rate how good the picture looks, from 1 (very poor) to 5 (excellent).</p>
+    <p class="lead"><b id="nRounds">40</b> quick rounds, about five minutes. Each round shows one caption and one picture. <b>1</b>&nbsp;Say whether the picture shows the caption, and <b>2</b>&nbsp;rate how good the picture looks, from 1 (very poor) to 5 (excellent).</p>
     <div class="practice">
       <div class="qlabel">Warm-up: does this picture show</div>
       <div class="caption">a <b>cat</b> <span class="rel">to the left of</span> a <b>dog</b></div>
@@ -164,8 +164,8 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
 <script>
 (() => {
   const INBOX = 'https://ntfy.sh/ssf-heval4ms-2d22456a1b69ba95';
-  const STUDY = 'imagenet-4m-single-v4';
-  const KEY = 'rds-' + STUDY, ROUNDS = 40, CROUNDS = 16;
+  const STUDY = 'imagenet-4m-single-v5';
+  const KEY = 'rds-' + STUDY, ROUNDS = 16, CROUNDS = 24;
   // ?dry=1 previews the study without sending answers; local copies (localhost) never send
   const DRY = new URLSearchParams(location.search).has('dry') || /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
   const $ = id => document.getElementById(id);
@@ -218,7 +218,7 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
   }
   function payload(final) {
     const rows = P.map((t, i) => A[i] && (A[i].c || A[i].r) ? {n: t.n, id: t.id, v: t.v, m: t.m, c: A[i].c || null, r: A[i].r || null, ms: A[i].ms, msr: A[i].msr} : null).filter(Boolean);
-    return JSON.stringify({v: 12, study: STUDY, pid: st.pid, name: st.name, seed: st.seed, t0: st.t0, dur: Math.round(Date.now() - st.t0ms),
+    return JSON.stringify({v: 13, study: STUDY, pid: st.pid, name: st.name, seed: st.seed, t0: st.t0, dur: Math.round(Date.now() - st.t0ms),
       ua: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? 'm' : 'd', practice: st.practice, final, early: nDone() < P.length, trials: rows});
   }
   function send(final) {
