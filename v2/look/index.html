@@ -12,7 +12,8 @@
 <!-- Look study v2 (imagenet-look15-v2, payload v 15), built 2026-11-10 from Aviv's v2/imagenet_4m page. SiT-XL/2 1.3M, the relation-guided FID
      images (548 facts x 9 noise samples), kept only where OWLv2 finds BOTH objects in all 8 pictures (2 models x 2 guidance settings x
      original/flipped caption), one picture set per fact; four hidden picture sources, same noise. Each round shows ONE picture:
-     question 1 asks whether it shows the caption (Yes / No), question 2 rates how good it looks, 1-5. -->
+     question 1 asks whether it shows the caption (Yes / No), question 2 rates how good it looks, 1-5.
+     Payload v 16 (2026-11-10 ~19:00, Idan): question 2 adds that the models are still mid-training; v 15 = the first raters, without it. -->
 <style>
 [hidden]{display:none!important}
 :root{
@@ -139,7 +140,7 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
       <button class="alt" id="bN">No</button>
     </div>
     <div class="q2" id="q2">
-      <div class="qt"><span class="step">2</span>How good does the picture look?<small>From 1 (very poor) to 5 (excellent). A caption may ask for an odd layout, so do not count the layout itself.</small></div>
+      <div class="qt"><span class="step">2</span>How good does the picture look?<small>From 1 (very poor) to 5 (excellent). The models are still mid-training, so do not expect perfect pictures. A caption may ask for an odd layout, so do not count the layout itself.</small></div>
       <div class="scale"><button class="rt" data-v="1" aria-label="1, Very poor"><b>1</b><i>Very poor</i></button><button class="rt" data-v="2" aria-label="2, Poor"><b>2</b><i>Poor</i></button><button class="rt" data-v="3" aria-label="3, Fair"><b>3</b><i>Fair</i></button><button class="rt" data-v="4" aria-label="4, Good"><b>4</b><i>Good</i></button><button class="rt" data-v="5" aria-label="5, Excellent"><b>5</b><i>Excellent</i></button></div>
     </div>
     <div class="foot">
@@ -218,7 +219,7 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
   }
   function payload(final) {
     const rows = P.map((t, i) => A[i] && (A[i].c || A[i].r) ? {n: t.n, id: t.id, v: t.v, m: t.m, c: A[i].c || null, r: A[i].r || null, ms: A[i].ms, msr: A[i].msr} : null).filter(Boolean);
-    return JSON.stringify({v: 15, study: STUDY, pid: st.pid, name: st.name, seed: st.seed, t0: st.t0, dur: Math.round(Date.now() - st.t0ms),
+    return JSON.stringify({v: 16, study: STUDY, pid: st.pid, name: st.name, seed: st.seed, t0: st.t0, dur: Math.round(Date.now() - st.t0ms),
       ua: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? 'm' : 'd', practice: st.practice, final, early: nDone() < P.length, trials: rows});
   }
   function send(final) {
