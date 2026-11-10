@@ -94,6 +94,8 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
 .rt:hover{border-color:var(--accent)}
 .rt.sel{background:var(--accent);border-color:var(--accent);color:#fff}
 .rt.sel i{color:#fff}
+/* no carried-over highlight: a new round suppresses hover until the pointer moves (phones keep :hover after a tap) */
+.nohover .alt:not(.sel):hover,.nohover .rt:not(.sel):hover{border-color:var(--line)}
 .rt:active{transform:scale(.96)}
 @media (max-width:520px){.card{padding:16px;border-radius:18px}.scale{gap:4px}.rt i{font-size:10px}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -207,6 +209,7 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
   }
   function show(i) {
     pos = i; const t = P[i], v = fact(t.n).v[t.v];
+    document.body.classList.add('nohover'); if (document.activeElement && document.activeElement !== document.body) document.activeElement.blur();
     $('cap').innerHTML = v.cls ? np(v.cls) : captionHTML(v); $('img').src = v.img[t.m];
     const nx = P[i + 1]; if (nx) { const im = new Image(); im.src = fact(nx.n).v[nx.v].img[nx.m]; }
     paint(); $('back').disabled = i === 0; $('stop').hidden = nDone() === 0;
@@ -287,6 +290,7 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
   $('more').addEventListener('click', () => { st.ended = false; save(); $('done').hidden = true; $('trial').hidden = false; const f = P.findIndex((_, i) => !full(i)); show(f < 0 ? 0 : f); });
   $('share').addEventListener('click', () => { const u = location.origin + location.pathname;
     (navigator.clipboard ? navigator.clipboard.writeText(u) : Promise.reject()).then(() => toast('Link copied 🔗'), () => toast(u)); });
+  document.addEventListener('mousemove', () => document.body.classList.remove('nohover'));
   document.addEventListener('keydown', e => {
     if ($('trial').hidden || e.target.tagName === 'INPUT') return;
     const first = !(A[pos] && A[pos].c), k = e.key.toLowerCase();
