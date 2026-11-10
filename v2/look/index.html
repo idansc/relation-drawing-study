@@ -9,8 +9,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&display=swap">
-<!-- Look study (imagenet-look15-v1, payload v 14), built 2026-11-10 from Aviv's v2/imagenet_4m page. SiT-XL/2 1.3M, the 100 Table-1 prompts,
-     original and flipped caption; four hidden picture sources (two models x two guidance settings, same noise). Each round shows ONE picture:
+<!-- Look study v2 (imagenet-look15-v2, payload v 15), built 2026-11-10 from Aviv's v2/imagenet_4m page. SiT-XL/2 1.3M, the relation-guided FID
+     images (548 facts x 9 noise samples), kept only where OWLv2 finds BOTH objects in all 8 pictures (2 models x 2 guidance settings x
+     original/flipped caption), one picture set per fact; four hidden picture sources, same noise. Each round shows ONE picture:
      question 1 asks whether it shows the caption (Yes / No), question 2 rates how good it looks, 1-5. -->
 <style>
 [hidden]{display:none!important}
@@ -163,8 +164,8 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
 
 <script>
 (() => {
-  const INBOX = 'https://ntfy.sh/ssf-look15-d043c551fe77774e';
-  const STUDY = 'imagenet-look15-v1';
+  const INBOX = 'https://ntfy.sh/ssf-look15v2-c22a98e8e55289a2';
+  const STUDY = 'imagenet-look15-v2';
   const KEY = 'rds-' + STUDY, ROUNDS = 40;
   // ?dry=1 previews the study without sending answers; local copies (localhost) never send
   const DRY = new URLSearchParams(location.search).has('dry') || /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
@@ -214,7 +215,7 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
   }
   function payload(final) {
     const rows = P.map((t, i) => A[i] && (A[i].c || A[i].r) ? {n: t.n, id: t.id, v: t.v, m: t.m, c: A[i].c || null, r: A[i].r || null, ms: A[i].ms, msr: A[i].msr} : null).filter(Boolean);
-    return JSON.stringify({v: 14, study: STUDY, pid: st.pid, name: st.name, seed: st.seed, t0: st.t0, dur: Math.round(Date.now() - st.t0ms),
+    return JSON.stringify({v: 15, study: STUDY, pid: st.pid, name: st.name, seed: st.seed, t0: st.t0, dur: Math.round(Date.now() - st.t0ms),
       ua: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? 'm' : 'd', practice: st.practice, final, early: nDone() < P.length, trials: rows});
   }
   function send(final) {
